@@ -1,0 +1,43 @@
+import { Hono } from 'hono'
+import { authService } from '../services/authService'
+import { requireAuth } from '../middleware/authMiddleware'
+import { signupSchema, loginSchema, updateUserSchema } from '../validators/schemas'
+
+const auth = new Hono()
+
+// POST /api/v1/auth/signup
+auth.post('/signup', async (c) => {
+  const body = await c.req.json()
+  const data = signupSchema.parse(body)
+  const result = await authService.signup(data)
+  return c.json({ success: true, ...result }, 201)
+})
+
+// POST /api/v1/auth/login
+auth.post('/login', async (c) => {
+  const body = await c.req.json()
+  const data = loginSchema.parse(body)
+  const result = await authService.login(data)
+  return c.json({ success: true, ...result })
+})
+
+// POST /api/v1/auth/logout  (stateless JWT — client just discards the token)
+auth.post('/logout', (c) => c.json({ success: true, message: 'Logged out' }))
+
+// GET /api/v1/user/me
+auth.get('/me', requireAuth, async (c) => {
+  const userId = c.get('userId')
+  const user = await authService.getMe(userId)
+  return c.json({ success: true, user })
+})
+
+// PUT /api/v1/user/me
+auth.put('/me', requireAuth, async (c) => {
+  const userId = c.get('userId')
+  const body = await c.req.json()
+  const data = updateUserSchema.parse(body)
+  const user = await authService.updateMe(userId, data)
+  return c.json({ success: true, user })
+})
+
+export default auth
