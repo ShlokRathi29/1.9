@@ -71,7 +71,7 @@ export const paymentService = {
     const order = await razorpay.orders.create({
       amount: plan.pricePaise,
       currency: 'INR',
-      receipt: `zapkey_${userId}_${Date.now()}`,
+      receipt: `zk_${userId.slice(-8)}_${Date.now()}`,  // max 40 chars
       notes: { userId, planId, tokensAdded: plan.tokens },
     })
 

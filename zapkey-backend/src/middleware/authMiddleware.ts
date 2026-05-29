@@ -24,14 +24,18 @@ export async function requireAuth(c: Context, next: Next) {
   }
 
   const token = header.slice(7)
+
+  // Only wrap verify() — do NOT catch errors from downstream handlers
+  let payload: JwtPayload
   try {
-    const payload = verify(token, env.JWT_SECRET) as JwtPayload
-    c.set('userId', payload.userId)
-    c.set('jwtPayload', payload)
-    await next()
+    payload = verify(token, env.JWT_SECRET) as JwtPayload
   } catch {
     return c.json({ success: false, error: 'Invalid or expired token' }, 401)
   }
+
+  c.set('userId', payload.userId)
+  c.set('jwtPayload', payload)
+  await next()
 }
 
 /** Optional auth — sets userId if token present, but does not block. */
