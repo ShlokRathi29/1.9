@@ -22,7 +22,7 @@ export function FAQSection({ locationName, faqs }: FAQSectionProps) {
   const defaultFaqs: FAQ[] = [
     {
       question: `What is the range of housing prices in ${locationName}?`,
-      answer: `Housing prices in ${locationName} vary based on the type of property, location, and amenities. You can find options starting from budget-friendly apartments to premium luxury homes. Use Zapkey to check actual registered transaction prices.`,
+      answer: `Housing prices in ${locationName} vary based on the type of property, location, and amenities. You can find options starting from budget-friendly apartments to premium luxury homes. Use Pureframe Labs to check actual registered transaction prices.`,
     },
     {
       question: `How is the infrastructure in ${locationName}?`,
@@ -38,7 +38,7 @@ export function FAQSection({ locationName, faqs }: FAQSectionProps) {
     },
     {
       question: `Which are the affordable projects in ${locationName}?`,
-      answer: `${locationName} offers various affordable housing options across different budget ranges. Use actual transaction data on Zapkey to find projects that match your budget.`,
+      answer: `${locationName} offers various affordable housing options across different budget ranges. Use actual transaction data on Pureframe Labs to find projects that match your budget.`,
     },
   ]
 

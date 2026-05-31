@@ -60,7 +60,7 @@ export function TrendsSection() {
 
         {/* Info Text */}
         <p className="mt-6 text-sm text-gray-600">
-          Zapkey helps you negotiate the best price based on the latest property
+          Pureframe Labs helps you negotiate the best price based on the latest property
           transactions in any project. We have 6 sales in Geras Trinity Towers
           which have been registered in the last 12 months. In case you plan to
           buy your dream home in Geras Trinity Towers or across any other 309

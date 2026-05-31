@@ -10,6 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { useRouter } from "next/navigation"
+import { PureframeLogo } from "@/components/pureframe-logo"
 
 export function Header() {
   const router = useRouter()
@@ -32,12 +33,10 @@ export function Header() {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
         {/* Logo */}
         <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-orange-500">
-            <svg viewBox="0 0 24 24" className="h-5 w-5 text-white" fill="currentColor">
-              <path d="M13 3L4 14h7l-2 7 9-11h-7l2-7z" />
-            </svg>
+          <div className="flex h-8 w-8 items-center justify-center text-orange-500">
+            <PureframeLogo className="h-6 w-6" />
           </div>
-          <span className="text-xl font-bold text-gray-900">Zapkey</span>
+          <span className="text-xl font-bold text-gray-900">Pureframe Labs</span>
         </div>
 
         {/* Search Section */}

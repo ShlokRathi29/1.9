@@ -78,7 +78,7 @@ export function ProfileSidebar() {
           </div>
 
           <div className="border-t p-4 text-xs text-gray-500 text-center">
-            <p>© Zapkey Technologies 2026</p>
+            <p>© Pureframe Labs 2026</p>
           </div>
         </div>
       </SheetContent>

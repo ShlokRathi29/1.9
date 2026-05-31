@@ -7,7 +7,7 @@ const geist = Geist({ subsets: ['latin'], variable: '--font-geist-sans' })
 const geistMono = Geist_Mono({ subsets: ['latin'], variable: '--font-geist-mono' })
 
 export const metadata: Metadata = {
-  title: 'Zapkey - Real Estate Transaction Analytics',
+  title: 'Pureframe Labs - Real Estate Transaction Analytics',
   description: 'Look at actual property transactions to negotiate a better deal. Government registry data for Pune, Mumbai, Bangalore and more.',
 }
 

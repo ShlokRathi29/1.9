@@ -205,10 +205,10 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Why Zapkey */}
+      {/* Why Pureframe Labs */}
       <section className="py-14 bg-gray-50">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-10">Why use Zapkey?</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-10">Why use Pureframe Labs?</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               { icon: '📋', title: 'Government Data', desc: 'Real registration data from official government records — not estimates.' },

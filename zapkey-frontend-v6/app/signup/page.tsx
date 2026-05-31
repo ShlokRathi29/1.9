@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label'
 import { useToast } from '@/hooks/use-toast'
 import { useAppStore } from '@/lib/store'
 import { auth } from '@/lib/api'
+import { PureframeLogo } from '@/components/pureframe-logo'
 
 export default function SignupPage() {
   const router = useRouter()
@@ -50,7 +51,7 @@ export default function SignupPage() {
       localStorage.setItem('zapkey_token', token)
       setUser(user)
       setTokens(user.walletBalance ?? 0)
-      toast({ title: 'Account created!', description: 'Welcome to Zapkey.' })
+      toast({ title: 'Account created!', description: 'Welcome to Pureframe Labs.' })
       router.push('/')
     } catch (err: any) {
       toast({ title: 'Signup failed', description: err.message || 'Could not create account.', variant: 'destructive' })
@@ -64,15 +65,13 @@ export default function SignupPage() {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2 mb-6">
-            <div className="w-10 h-10 bg-orange-500 rounded-xl flex items-center justify-center">
-              <svg viewBox="0 0 24 24" className="h-6 w-6 text-white" fill="currentColor">
-                <path d="M13 3L4 14h7l-2 7 9-11h-7l2-7z" />
-              </svg>
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center text-orange-500 bg-orange-50">
+              <PureframeLogo className="h-7 w-7" />
             </div>
-            <span className="text-2xl font-bold text-gray-900">Zapkey</span>
+            <span className="text-2xl font-bold text-gray-900">Pureframe Labs</span>
           </Link>
           <h1 className="text-2xl font-bold text-gray-900">Create your account</h1>
-          <p className="text-gray-500 mt-1">Get started with Zapkey</p>
+          <p className="text-gray-500 mt-1">Get started with Pureframe Labs</p>
         </div>
 
         <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8">

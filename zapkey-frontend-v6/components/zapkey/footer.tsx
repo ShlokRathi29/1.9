@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { Facebook, Twitter, Linkedin, Instagram, Youtube } from "lucide-react"
+import { PureframeLogo } from "@/components/pureframe-logo"
 
 export function Footer() {
   return (
@@ -9,16 +10,10 @@ export function Footer() {
           {/* Logo Section */}
           <div>
             <div className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-orange-500">
-                <svg
-                  viewBox="0 0 24 24"
-                  className="h-5 w-5 text-white"
-                  fill="currentColor"
-                >
-                  <path d="M13 3L4 14h7l-2 7 9-11h-7l2-7z" />
-                </svg>
+              <div className="flex h-8 w-8 items-center justify-center text-orange-500">
+                <PureframeLogo className="h-6 w-6" />
               </div>
-              <span className="text-xl font-bold">Zapkey</span>
+              <span className="text-xl font-bold">Pureframe Labs</span>
             </div>
           </div>
 
@@ -30,12 +25,12 @@ export function Footer() {
             <ul className="space-y-2 text-sm text-gray-400">
               <li>
                 <Link href="#" className="hover:text-white">
-                  Sell with Zapkey
+                  Sell with Pureframe Labs
                 </Link>
               </li>
               <li>
                 <Link href="#" className="hover:text-white">
-                  Buy Zapkey Homes
+                  Buy Pureframe Homes
                 </Link>
               </li>
               <li>
@@ -115,7 +110,7 @@ export function Footer() {
       <div className="border-t border-gray-800">
         <div className="mx-auto max-w-7xl px-4 py-4">
           <p className="text-center text-sm text-gray-500">
-            © Zapkey Technologies 2026
+            © Pureframe Labs 2026
           </p>
         </div>
       </div>

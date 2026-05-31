@@ -76,7 +76,7 @@ export default function PlansPage() {
         amount: order.amount,
         currency: order.currency,
         order_id: order.orderId,
-        name: 'Zapkey',
+        name: 'Pureframe Labs',
         description: 'Token Purchase',
         prefill: {
           name: user?.name ?? '',
@@ -141,7 +141,7 @@ export default function PlansPage() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">Save lakhs on your property</h1>
           <p className="text-xl text-orange-100">
-            Compare the quoted price with actual transacted prices on Zapkey to negotiate the best deal
+            Compare the quoted price with actual transacted prices on Pureframe Labs to negotiate the best deal
           </p>
         </div>
       </section>
@@ -153,7 +153,7 @@ export default function PlansPage() {
             <div className="mb-10 bg-orange-50 border border-orange-200 rounded-xl p-5 flex items-center justify-between gap-4 flex-wrap">
               <div>
                 <p className="font-semibold text-gray-900">Sign in to purchase tokens</p>
-                <p className="text-sm text-gray-500 mt-0.5">You need a Zapkey account to buy and use tokens.</p>
+                <p className="text-sm text-gray-500 mt-0.5">You need a Pureframe Labs account to buy and use tokens.</p>
               </div>
               <div className="flex gap-3">
                 <Link href="/login">
@@ -207,7 +207,7 @@ export default function PlansPage() {
           <div className="text-center mt-14">
             <p className="text-gray-600">
               Need a custom plan?{' '}
-              <Link href="mailto:support@zapkey.com" className="text-orange-600 font-semibold hover:text-orange-700">
+              <Link href="mailto:support@pureframelabs.com" className="text-orange-600 font-semibold hover:text-orange-700">
                 Contact us
               </Link>
             </p>

@@ -36,3 +36,13 @@ coverage/
 dist/
 temp/
 tmp/
+
+# Prisma
+*.db
+*.db-journal
+
+# Vercel
+.vercel/
+
+# Turborepo
+.turbo/

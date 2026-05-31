@@ -6,6 +6,7 @@ import { ShoppingCart, Eye, User, LogIn } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useAppStore } from '@/lib/store'
 import { auth } from '@/lib/api'
+import { PureframeLogo } from '@/components/pureframe-logo'
 
 export function Navbar() {
   const { tokens, setSidebarOpen, user, setUser, setTokens } = useAppStore()
@@ -32,12 +33,10 @@ export function Navbar() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 flex-shrink-0">
-            <div className="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center">
-              <svg viewBox="0 0 24 24" className="h-5 w-5 text-white" fill="currentColor">
-                <path d="M13 3L4 14h7l-2 7 9-11h-7l2-7z" />
-              </svg>
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center text-orange-500 bg-orange-50">
+              <PureframeLogo className="h-6 w-6" />
             </div>
-            <span className="font-bold text-lg text-gray-900">Zapkey</span>
+            <span className="font-bold text-lg text-gray-900">Pureframe Labs</span>
           </Link>
 
           {/* Navigation */}
