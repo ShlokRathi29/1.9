@@ -21,8 +21,6 @@ export function ProfileSidebar() {
 
   const menuItems = [
     { icon: Home, label: 'Home', href: '/' },
-    { icon: Tag, label: 'Sell', href: '#' },
-    { icon: ShoppingBag, label: 'Buy', href: '#' },
     { icon: User, label: 'Profile', href: '/profile' },
     { icon: CalendarDays, label: 'My Account', href: '/account' },
     { icon: Heart, label: 'Favourites', href: '/favorites' },

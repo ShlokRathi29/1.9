@@ -39,14 +39,6 @@ export function Navbar() {
             <span className="font-bold text-lg text-gray-900">Pureframe Labs</span>
           </Link>
 
-          {/* Navigation */}
-          <div className="hidden md:flex gap-8">
-            <Link href="/" className="text-gray-700 hover:text-orange-500 font-medium border-b-2 border-orange-500 pb-1 text-sm">
-              Transaction Data
-            </Link>
-            <span className="text-gray-300 font-medium text-sm cursor-not-allowed pb-1">Buy Homes</span>
-            <span className="text-gray-300 font-medium text-sm cursor-not-allowed pb-1">Sell Homes</span>
-          </div>
 
           {/* Right Actions */}
           <div className="flex items-center gap-2">

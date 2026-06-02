@@ -25,16 +25,6 @@ export function Footer() {
             <ul className="space-y-2 text-sm text-gray-400">
               <li>
                 <Link href="#" className="hover:text-white">
-                  Sell with Pureframe Labs
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:text-white">
-                  Buy Pureframe Homes
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:text-white">
                   For Broker Partners
                 </Link>
               </li>

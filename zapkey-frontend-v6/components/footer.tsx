@@ -24,16 +24,6 @@ export function Footer() {
             <ul className="space-y-2 text-sm">
               <li>
                 <Link href="#" className="hover:text-orange-500 transition-colors">
-                  Sell with Clone
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:text-orange-500 transition-colors">
-                  Buy Clone Homes
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:text-orange-500 transition-colors">
                   For Broker Partners
                 </Link>
               </li>
