@@ -10,6 +10,7 @@ export const signupSchema = z.object({
     .regex(/^[6-9]\d{9}$/, 'Invalid Indian phone number (10 digits)')
     .optional(),
   password: z.string().min(6, 'Password must be at least 6 characters').max(100),
+  phoneToken: z.string().optional(),
 }).refine((d) => d.email || d.phone, {
   message: 'At least one of email or phone is required',
 })

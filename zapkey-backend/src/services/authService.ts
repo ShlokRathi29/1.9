@@ -5,6 +5,28 @@ import { env } from '../config/env'
 import { httpError } from '../middleware/errorMiddleware'
 import type { SignupInput, LoginInput, UpdateUserInput } from '../validators/schemas'
 
+const MSG91_AUTHKEY = '521126AaQ8x7pb6a1d4565P1'
+
+async function verifyMSG91Token(token: string) {
+  try {
+    const res = await fetch('https://control.msg91.com/api/v5/widget/verifyAccessToken', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        authkey: MSG91_AUTHKEY,
+        "access-token": token
+      })
+    })
+    const data = await res.json()
+    if (data.type === 'error' || data.msgType === 'error') {
+      throw new Error(data.message || 'OTP verification failed')
+    }
+    return data
+  } catch (err: any) {
+    throw httpError(`OTP verification failed: ${err.message}`, 400)
+  }
+}
+
 function signToken(userId: string, email?: string | null): string {
   return jwt.sign({ userId, email }, env.JWT_SECRET, {
     expiresIn: env.JWT_EXPIRES_IN as any,
@@ -21,6 +43,12 @@ export const authService = {
     if (data.phone) {
       const existing = await prisma.user.findUnique({ where: { phone: data.phone } })
       if (existing) throw httpError('Phone number already in use', 409)
+      if (data.phoneToken) {
+        await verifyMSG91Token(data.phoneToken)
+      } else {
+        // Enforce phone verification
+        throw httpError('Phone verification is required', 400)
+      }
     }
 
     const passwordHash = await bcrypt.hash(data.password, 12)

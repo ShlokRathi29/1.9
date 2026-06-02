@@ -1,9 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { Eye, EyeOff } from 'lucide-react'
+import { Eye, EyeOff, CheckCircle2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -12,6 +12,13 @@ import { useAppStore } from '@/lib/store'
 import { auth } from '@/lib/api'
 import { PureframeLogo } from '@/components/pureframe-logo'
 
+// Add to window object for TypeScript
+declare global {
+  interface Window {
+    initSendOTP?: (config: any) => void
+  }
+}
+
 export default function SignupPage() {
   const router = useRouter()
   const { toast } = useToast()
@@ -19,9 +26,73 @@ export default function SignupPage() {
   const [form, setForm] = useState({ name: '', email: '', phone: '', password: '' })
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
+  
+  const [phoneToken, setPhoneToken] = useState('')
+  const [isPhoneVerified, setIsPhoneVerified] = useState(false)
 
-  const update = (field: string) => (e: React.ChangeEvent<HTMLInputElement>) =>
+  useEffect(() => {
+    // Load MSG91 OTP Provider Script
+    const urls = [
+      'https://verify.msg91.com/otp-provider.js',
+      'https://verify.phone91.com/otp-provider.js'
+    ]
+    let i = 0
+    function attempt() {
+      const s = document.createElement('script')
+      s.src = urls[i]
+      s.async = true
+      s.onerror = () => {
+        i++
+        if (i < urls.length) attempt()
+      }
+      document.head.appendChild(s)
+    }
+    attempt()
+  }, [])
+
+  const update = (field: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm((prev) => ({ ...prev, [field]: e.target.value }))
+    if (field === 'phone') {
+      setIsPhoneVerified(false)
+      setPhoneToken('')
+    }
+  }
+
+  const triggerVerification = () => {
+    const identifier = form.phone
+    if (!identifier) {
+      toast({ title: 'Missing phone', description: 'Please enter a valid phone number first.', variant: 'destructive' })
+      return
+    }
+
+    if (!/^\d{10}$/.test(identifier.replace(/[\s\-\+91]/g, ''))) {
+      toast({ title: 'Invalid phone', description: 'Please enter a valid 10-digit Indian mobile number.', variant: 'destructive' })
+      return
+    }
+
+    // MSG91 prefers 91 prefix for Indian numbers
+    const finalIdentifier = `91${identifier.replace(/\D/g, '').slice(-10)}`
+
+    if (window.initSendOTP) {
+      window.initSendOTP({
+        widgetId: '366661696a6d393030313330',
+        tokenAuth: '521126Te7genma6a1d4e2bP1',
+        identifier: finalIdentifier,
+        exposeMethods: false,
+        success: (data: any) => {
+          setPhoneToken(data.message)
+          setIsPhoneVerified(true)
+          toast({ title: 'Verified', description: 'Phone number verified successfully.' })
+        },
+        failure: (error: any) => {
+          console.error('OTP failure:', error)
+          toast({ title: 'Verification failed', description: error?.message || 'Could not verify.', variant: 'destructive' })
+        }
+      })
+    } else {
+      toast({ title: 'Service unavailable', description: 'OTP service is loading. Please try again.', variant: 'destructive' })
+    }
+  }
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -42,11 +113,21 @@ export default function SignupPage() {
       return
     }
 
+    if (phone && !isPhoneVerified) {
+      toast({ title: 'Verification required', description: 'Please verify your phone number first.', variant: 'destructive' })
+      return
+    }
+
     setLoading(true)
     try {
       const payload: any = { name: form.name, password: form.password }
-      if (form.email) payload.email = form.email
-      if (phone) payload.phone = phone
+      if (form.email) {
+        payload.email = form.email
+      }
+      if (phone) {
+        payload.phone = phone
+        if (isPhoneVerified) payload.phoneToken = phoneToken
+      }
       const { token, user } = await auth.signup(payload)
       localStorage.setItem('zapkey_token', token)
       setUser(user)
@@ -87,9 +168,19 @@ export default function SignupPage() {
             </div>
 
             <div>
-              <Label htmlFor="phone" className="text-sm font-medium text-gray-700">Phone Number</Label>
-              <Input id="phone" type="tel" placeholder="9876543210" value={form.phone} onChange={update('phone')} className="mt-1 h-11 border-gray-300 rounded-xl" autoComplete="tel" />
-              <p className="text-xs text-gray-400 mt-1">At least one of email or phone is required</p>
+              <Label htmlFor="phone" className="text-sm font-medium text-gray-700">Phone Number <span className="text-red-500">*</span></Label>
+              <div className="flex gap-2 mt-1">
+                <Input id="phone" type="tel" placeholder="9876543210" value={form.phone} onChange={update('phone')} disabled={isPhoneVerified} className="h-11 border-gray-300 rounded-xl" autoComplete="tel" />
+                {form.phone.length >= 10 && !isPhoneVerified && (
+                  <Button type="button" onClick={triggerVerification} variant="outline" className="h-11 rounded-xl whitespace-nowrap">Verify</Button>
+                )}
+                {isPhoneVerified && (
+                  <div className="h-11 px-4 flex items-center justify-center bg-green-50 text-green-600 rounded-xl border border-green-200">
+                    <CheckCircle2 className="w-5 h-5" />
+                  </div>
+                )}
+              </div>
+              <p className="text-xs text-gray-400 mt-1">Required to secure your account</p>
             </div>
 
             <div>
