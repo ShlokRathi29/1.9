@@ -65,13 +65,16 @@ export default function SignupPage() {
       return
     }
 
-    if (!/^\d{10}$/.test(identifier.replace(/[\s\-\+91]/g, ''))) {
+    const rawPhone = identifier.trim().replace(/[\s\-]/g, '')
+    const phone = rawPhone.startsWith('+91') ? rawPhone.slice(3) : rawPhone.startsWith('91') && rawPhone.length === 12 ? rawPhone.slice(2) : rawPhone
+
+    if (!/^\d{10}$/.test(phone)) {
       toast({ title: 'Invalid phone', description: 'Please enter a valid 10-digit Indian mobile number.', variant: 'destructive' })
       return
     }
 
     // MSG91 prefers 91 prefix for Indian numbers
-    const finalIdentifier = `91${identifier.replace(/\D/g, '').slice(-10)}`
+    const finalIdentifier = `91${phone}`
 
     if (window.initSendOTP) {
       window.initSendOTP({

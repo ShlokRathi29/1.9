@@ -22,6 +22,7 @@ export const env = {
   PORT:                parseInt(optionalEnv('PORT', '3001'), 10),
   NODE_ENV:            optionalEnv('NODE_ENV', 'development'),
   FRONTEND_URL:        optionalEnv('FRONTEND_URL', 'http://localhost:3000'),
+  MSG91_AUTHKEY:       optionalEnv('MSG91_AUTHKEY', ''),
   isDev():             boolean { return this.NODE_ENV === 'development' },
   isProd():            boolean { return this.NODE_ENV === 'production' },
 }

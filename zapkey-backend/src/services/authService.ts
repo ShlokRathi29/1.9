@@ -5,15 +5,13 @@ import { env } from '../config/env'
 import { httpError } from '../middleware/errorMiddleware'
 import type { SignupInput, LoginInput, UpdateUserInput } from '../validators/schemas'
 
-const MSG91_AUTHKEY = '521126AaQ8x7pb6a1d4565P1'
-
 async function verifyMSG91Token(token: string) {
   try {
     const res = await fetch('https://control.msg91.com/api/v5/widget/verifyAccessToken', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        authkey: MSG91_AUTHKEY,
+        authkey: env.MSG91_AUTHKEY,
         "access-token": token
       })
     })
