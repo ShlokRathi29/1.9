@@ -1,0 +1,156 @@
+# Pureframe Backend
+
+Bun + Hono + Prisma REST API for the Pureframe real estate analytics platform.
+
+## Quick Start
+
+### 1. Install dependencies
+```bash
+bun install
+```
+
+### 2. Configure environment
+```bash
+cp .env.example .env
+# Edit .env â€” fill in DATABASE_URL and JWT_SECRET at minimum
+```
+
+### 3. Set up the database
+```bash
+# Make sure PostgreSQL is running, then:
+bun run db:migrate          # creates tables from Prisma schema
+bun run db:generate         # generates Prisma client
+```
+
+### 4. Start the server
+```bash
+bun run dev                 # dev mode with --watch
+bun run start               # production
+```
+
+Server runs on **http://localhost:3001**
+
+---
+
+## API Reference
+
+All endpoints prefixed `/api/v1/`. Auth via `Authorization: Bearer <token>`.
+
+### Auth
+| Method | Path | Auth | Description |
+|---|---|---|---|
+| POST | `/auth/signup` | No | Register, returns JWT + user |
+| POST | `/auth/login` | No | Login, returns JWT + user |
+| POST | `/auth/logout` | No | Stateless â€” client discards token |
+| GET | `/user/me` | âœ… | Get current user + balance |
+| PUT | `/user/me` | âœ… | Update name/email/phone |
+
+### Browse (reads from DB2)
+| Method | Path | Auth | Description |
+|---|---|---|---|
+| GET | `/cities` | No | List all cities |
+| GET | `/cities/:cityId/localities` | No | Localities in city (paginated, sorted by sale count) |
+| GET | `/localities/:localityId/projects` | No | Projects in locality |
+| GET | `/projects/search?city=&q=` | No | Search projects by name |
+| GET | `/projects/:projectId` | Optional | Full detail if unlocked, summary if not |
+| GET | `/projects/:projectId/transactions` | Optional | Paginated txns; amounts masked if locked |
+
+### Unlock
+| Method | Path | Auth | Description |
+|---|---|---|---|
+| POST | `/unlock` | âœ… | Unlock project (costs 1 token, 15-day window) |
+| GET | `/unlock/status/:projectId` | âœ… | Check unlock status + days remaining |
+
+### Wallet
+| Method | Path | Auth | Description |
+|---|---|---|---|
+| GET | `/wallet` | âœ… | Balance + last 20 wallet transactions |
+
+### Payments
+| Method | Path | Auth | Description |
+|---|---|---|---|
+| GET | `/payments/plans` | No | List all plans |
+| POST | `/payments/create-order` | âœ… | Create Razorpay order |
+| POST | `/payments/verify` | âœ… | Verify HMAC + credit tokens |
+| POST | `/payments/webhook` | No | Razorpay webhook (failure handling) |
+
+### Misc
+| Method | Path | Description |
+|---|---|---|
+| GET | `/` | Server info |
+| GET | `/api/v1/health` | Health check |
+
+---
+
+## Project Structure
+
+```
+src/
+â”œâ”€â”€ index.ts              â† Hono app entry, route mounting, CORS
+â”œâ”€â”€ config/
+â”‚   â””â”€â”€ env.ts            â† Centralised env with startup validation
+â”œâ”€â”€ db/
+â”‚   â”œâ”€â”€ prisma.ts         â† PrismaClient singleton (DB1)
+â”‚   â””â”€â”€ db2.ts            â† pg Pool for external DB2 (read-only)
+â”œâ”€â”€ middleware/
+â”‚   â”œâ”€â”€ authMiddleware.ts â† JWT verify, requireAuth / optionalAuth
+â”‚   â””â”€â”€ errorMiddleware.tsâ† Global error handler + ZodError formatting
+â”œâ”€â”€ validators/
+â”‚   â””â”€â”€ schemas.ts        â† All Zod schemas + inferred types
+â”œâ”€â”€ services/
+â”‚   â”œâ”€â”€ authService.ts    â† signup, login, getMe, updateMe
+â”‚   â”œâ”€â”€ projectService.ts â† DB2 queries (mock fallback until DB2 ready)
+â”‚   â”œâ”€â”€ walletService.ts  â† Atomic debit/credit with ledger logging
+â”‚   â”œâ”€â”€ unlockService.ts  â† 15-day project unlock logic
+â”‚   â””â”€â”€ paymentService.ts â† Razorpay order + HMAC verify
+â””â”€â”€ routes/
+    â”œâ”€â”€ auth.ts
+    â”œâ”€â”€ cities.ts
+    â”œâ”€â”€ locations.ts
+    â”œâ”€â”€ projects.ts
+    â”œâ”€â”€ unlock.ts
+    â”œâ”€â”€ wallet.ts
+    â””â”€â”€ payments.ts
+prisma/
+â””â”€â”€ schema.prisma         â† User, UnlockedProject, WalletTransaction, PaymentTransaction
+```
+
+---
+
+## Connecting DB2
+
+When the external database is ready:
+
+1. Set `DB2_URL` in `.env`
+2. Open `src/services/projectService.ts`
+3. For each function, uncomment the `db2Query(...)` block and remove the mock fallback
+4. Adjust column names to match the real DB2 schema
+
+The service automatically detects if `DB2_URL` is set and switches from mock to real queries.
+
+---
+
+## Business Rules (enforced in code)
+
+- **1 token = 1 project unlock** for 15 days (`UNLOCK_DURATION_DAYS = 15`)
+- **Razorpay HMAC** verified server-side in `paymentService.verifyPayment` before any token credit
+- **Wallet is a ledger** â€” every movement creates a `WalletTransaction` record
+- **Atomic transactions** â€” debit and balance update happen inside `prisma.$transaction()`
+- **DB2 is never written to** â€” only `db2Query` (read-only pool) is used
+- **Amounts are masked** in transaction responses until the project is unlocked
+
+---
+
+## Environment Variables
+
+| Variable | Required | Description |
+|---|---|---|
+| `DATABASE_URL` | âœ… | PostgreSQL connection string for DB1 |
+| `DB2_URL` | Optional | External DB2. If missing, mock data is used |
+| `JWT_SECRET` | âœ… | Min 32-char random secret for JWT signing |
+| `JWT_EXPIRES_IN` | No | JWT expiry (default: `7d`) |
+| `RAZORPAY_KEY_ID` | Optional | Razorpay key ID (payments disabled if absent) |
+| `RAZORPAY_KEY_SECRET` | Optional | Razorpay secret (payments disabled if absent) |
+| `PORT` | No | Server port (default: `3001`) |
+| `NODE_ENV` | No | `development` or `production` |
+| `FRONTEND_URL` | No | CORS origin (default: `http://localhost:3000`) |

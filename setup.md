@@ -1,6 +1,6 @@
 # Pureframe Labs - Project Setup Guide
 
-This guide provides step-by-step instructions to set up and run the full-stack Pureframe Labs project (Zapkey Frontend v6 & Backend) on a new machine. 
+This guide provides step-by-step instructions to set up and run the full-stack Pureframe Labs project (Pureframe Frontend v6 & Backend) on a new machine. 
 
 ## Prerequisites
 
@@ -33,11 +33,11 @@ The backend uses PostgreSQL as its database.
 
 ---
 
-## Backend Setup (Zapkey Backend)
+## Backend Setup (Pureframe Backend)
 
 1. **Navigate to the backend directory:**
    ```bash
-   cd zapkey-backend
+   cd pureframe-backend
    ```
 
 2. **Install Dependencies:**
@@ -46,12 +46,12 @@ The backend uses PostgreSQL as its database.
    ```
 
 3. **Environment Configuration:**
-   - Create a `.env` file in the `zapkey-backend` root folder.
+   - Create a `.env` file in the `pureframe-backend` root folder.
    - Add the necessary environment variables. The most critical one is the database URL.
    ```env
    # Example PostgreSQL Connection String
    # Format: postgresql://USER:PASSWORD@HOST:PORT/DATABASE_NAME
-   DATABASE_URL="postgresql://postgres:yourpassword@localhost:5432/zapkey"
+   DATABASE_URL="postgresql://postgres:yourpassword@localhost:5432/pureframe"
    JWT_SECRET="your_secure_jwt_secret"
    JWT_EXPIRES_IN="7d"
    
@@ -76,11 +76,11 @@ The backend uses PostgreSQL as its database.
 
 ---
 
-## Frontend Setup (Zapkey Frontend v6)
+## Frontend Setup (Pureframe Frontend v6)
 
 1. **Open a new terminal window** and navigate to the frontend directory:
    ```bash
-   cd zapkey-frontend-v6
+   cd pureframe-frontend-v6
    ```
 
 2. **Install Dependencies:**
@@ -89,7 +89,7 @@ The backend uses PostgreSQL as its database.
    ```
 
 3. **Environment Configuration:**
-   - Create a `.env.local` file in the `zapkey-frontend-v6` directory.
+   - Create a `.env.local` file in the `pureframe-frontend-v6` directory.
    - Configure the environment variables to point to the backend:
    ```env
    # Update this port based on what the backend prints when it starts
