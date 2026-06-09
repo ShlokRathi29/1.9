@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useMemo } from 'react'
 import { Download, ChevronLeft, ChevronRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -17,20 +16,16 @@ import { ProfileSidebar } from '@/components/profile-sidebar'
 import { Footer } from '@/components/pureframe/footer'
 import { useAppStore } from '@/lib/store'
 import { useToast } from '@/hooks/use-toast'
-
 const ITEMS_PER_PAGE = 10
-
 export default function ViewedTransactionsPage() {
   const { viewedTransactions } = useAppStore()
   const { toast } = useToast()
   const [currentPage, setCurrentPage] = useState(1)
-
   const totalPages = Math.ceil(viewedTransactions.length / ITEMS_PER_PAGE)
   const paginatedTransactions = viewedTransactions.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE
   )
-
   const handleExportExcel = () => {
     const csvContent = [
       ['Date', 'Project', 'Type', 'Floor/Tower', 'Unit', 'Amount'],
@@ -45,7 +40,6 @@ export default function ViewedTransactionsPage() {
     ]
       .map((row) => row.join(','))
       .join('\n')
-
     const element = document.createElement('a')
     element.setAttribute('href', `data:text/csv;charset=utf-8,${encodeURIComponent(csvContent)}`)
     element.setAttribute('download', 'viewed-transactions.csv')
@@ -53,21 +47,18 @@ export default function ViewedTransactionsPage() {
     document.body.appendChild(element)
     element.click()
     document.body.removeChild(element)
-
     toast({
       title: 'Downloaded',
       description: 'Transactions exported successfully',
     })
   }
-
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <Navbar />
       <ProfileSidebar />
-
       <div className="flex-1">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {/* Tab Navigation */}
+          {}
           <div className="border-b border-gray-200 mb-8">
             <div className="flex gap-8">
               <button className="pb-4 text-orange-500 font-semibold border-b-2 border-orange-500">
@@ -76,8 +67,7 @@ export default function ViewedTransactionsPage() {
               <button className="pb-4 text-gray-500 font-semibold">Viewed Addresses</button>
             </div>
           </div>
-
-          {/* Controls */}
+          {}
           <div className="flex justify-between items-center mb-6 flex-col sm:flex-row gap-4">
             <p className="text-sm text-gray-600">
               {viewedTransactions.length > 0
@@ -98,8 +88,7 @@ export default function ViewedTransactionsPage() {
               </Button>
             )}
           </div>
-
-          {/* Table */}
+          {}
           <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
             {viewedTransactions.length > 0 ? (
               <div className="overflow-x-auto">
@@ -150,8 +139,7 @@ export default function ViewedTransactionsPage() {
               </div>
             )}
           </div>
-
-          {/* Pagination */}
+          {}
           {viewedTransactions.length > 0 && (
             <div className="flex items-center justify-center gap-2 mt-6">
               <Button
@@ -193,7 +181,6 @@ export default function ViewedTransactionsPage() {
           )}
         </div>
       </div>
-
       <Footer />
     </div>
   )

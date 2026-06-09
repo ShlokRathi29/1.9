@@ -1,5 +1,4 @@
 import React from 'react'
-
 export function PureframeLogo({ className }: { className?: string }) {
   return (
     <svg 

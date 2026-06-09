@@ -1,13 +1,10 @@
 "use client"
-
 import { useState } from "react"
 import { Users, ChevronDown } from "lucide-react"
-
 interface YearComplaint {
   year: string
   count: number
 }
-
 interface RERAComplaintsProps {
   projectName: string
   totalComplaints: number
@@ -22,7 +19,6 @@ interface RERAComplaintsProps {
   remarkApproved: number
   scrutinyCompleted: number
 }
-
 export function RERAComplaints({
   projectName,
   totalComplaints,
@@ -38,7 +34,6 @@ export function RERAComplaints({
   scrutinyCompleted,
 }: RERAComplaintsProps) {
   const [showAllYears, setShowAllYears] = useState(false)
-
   return (
     <div className="bg-white rounded-lg border border-gray-200 p-6">
       <div className="flex items-center justify-between mb-6">
@@ -49,9 +44,8 @@ export function RERAComplaints({
           Total complaints: <span className="text-orange-500 font-medium">{totalComplaints}</span>
         </span>
       </div>
-      
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        {/* Year Wise Breakup */}
+        {}
         <div>
           <h3 className="text-xs font-medium text-gray-500 mb-3">YEAR WISE BREAKUP</h3>
           <div className="space-y-2">
@@ -72,8 +66,7 @@ export function RERAComplaints({
             </button>
           )}
         </div>
-
-        {/* Stats Grid */}
+        {}
         <div className="md:col-span-3 grid grid-cols-2 md:grid-cols-3 gap-4">
           <StatItem label="BENCH ASSIGNED" value={benchAssigned} />
           <StatItem label="COMPLAINT SUBMITTED" value={complaintSubmitted} />
@@ -89,7 +82,6 @@ export function RERAComplaints({
     </div>
   )
 }
-
 function StatItem({ label, value }: { label: string; value: number }) {
   return (
     <div>

@@ -1,17 +1,11 @@
-/**
- * Centralised env config — throws at startup if required vars are missing.
- */
-
 function requireEnv(key: string): string {
   const val = process.env[key]
   if (!val) throw new Error(`Missing required environment variable: ${key}`)
   return val
 }
-
 function optionalEnv(key: string, fallback: string): string {
   return process.env[key] ?? fallback
 }
-
 export const env = {
   DATABASE_URL:        requireEnv('DATABASE_URL'),
   DB2_URL:             optionalEnv('DB2_URL', ''),

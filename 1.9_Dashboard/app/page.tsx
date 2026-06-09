@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -21,12 +20,10 @@ import { Badge } from '@/components/ui/badge'
 import { cities as mockCities } from '@/lib/mock-data'
 import { browse } from '@/lib/api'
 import { useToast } from '@/hooks/use-toast'
-
 const cityIcons: Record<string, string> = {
   '1': '🏙️', '2': '🏗️', '3': '🌳', '4': '💎',
   '5': '🌊', '6': '🏢', '7': '🛏️', '8': '🌞',
 }
-
 export default function HomePage() {
   const router = useRouter()
   const { toast } = useToast()
@@ -37,7 +34,6 @@ export default function HomePage() {
   const [citiesLoading, setCitiesLoading] = useState(true)
   const [searchResults, setSearchResults] = useState<any[]>([])
   const debounceRef = useRef<NodeJS.Timeout | null>(null)
-
   // Fetch cities on mount
   useEffect(() => {
     browse.getCities()
@@ -48,8 +44,6 @@ export default function HomePage() {
       })
       .finally(() => setCitiesLoading(false))
   }, [])
-
-  // Debounced project search
   useEffect(() => {
     if (!selectedCity || searchQuery.length < 2) {
       setSearchResults([])
@@ -66,15 +60,12 @@ export default function HomePage() {
     }, 300)
     return () => { if (debounceRef.current) clearTimeout(debounceRef.current) }
   }, [searchQuery, selectedCity])
-
   const handleViewTransactions = () => {
     if (!selectedCity) return
     const city = cities.find((c) => c.id === selectedCity)
     if (city) router.push(`/city/${encodeURIComponent(city.name)}/${city.id}`)
   }
-
   const handleProjectSelect = (project: any) => {
-    // Backend returns snake_case: locality_name, city_name
     const cityN = project.city_name || project.cityName || ''
     const localityN = project.locality_name || project.localityName || ''
     router.push(
@@ -83,12 +74,10 @@ export default function HomePage() {
     setSearchQuery('')
     setShowSuggestions(false)
   }
-
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <Navbar />
       <ProfileSidebar />
-
       {/* Hero */}
       <section className="relative bg-gradient-to-br from-orange-50 via-white to-orange-50 py-14 md:py-20">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -105,7 +94,6 @@ export default function HomePage() {
               <ChevronRight className="w-4 h-4" />
             </button>
           </div>
-
           <div className="text-center mb-12">
             <h1 className="text-3xl md:text-5xl font-bold text-gray-900 mb-4 leading-tight">
               Look at actual transactions to<br className="hidden md:block" /> negotiate a better deal!
@@ -114,7 +102,6 @@ export default function HomePage() {
               Property transactions as per government registry records
             </p>
           </div>
-
           {/* Search Card */}
           <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -134,7 +121,6 @@ export default function HomePage() {
                       ))}
                 </SelectContent>
               </Select>
-
               <div className="relative">
                 <Search className="absolute left-3 top-3.5 w-4 h-4 text-gray-400" />
                 <Input
@@ -160,7 +146,6 @@ export default function HomePage() {
                   </div>
                 )}
               </div>
-
               <Button
                 onClick={handleViewTransactions}
                 disabled={!selectedCity}
@@ -169,7 +154,6 @@ export default function HomePage() {
                 View Transactions
               </Button>
             </div>
-
             {!selectedCity && searchQuery.length > 1 && (
               <div className="mt-4 flex items-center gap-2 text-sm text-amber-700 bg-amber-50 border border-amber-200 p-3 rounded-xl">
                 <AlertCircle className="w-4 h-4 flex-shrink-0" />
@@ -179,7 +163,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
       {/* Trending Cities */}
       <section className="py-16 bg-white">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -204,7 +187,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
       {/* Why Pureframe Labs */}
       <section className="py-14 bg-gray-50">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -224,7 +206,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
       <Footer />
     </div>
   )

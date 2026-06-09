@@ -1,5 +1,4 @@
 'use client'
-
 import Link from 'next/link'
 import { Heart } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -8,22 +7,18 @@ import { ProfileSidebar } from '@/components/profile-sidebar'
 import { Footer } from '@/components/pureframe/footer'
 import { useAppStore } from '@/lib/store'
 import { transactions } from '@/lib/mock-data'
-
 export default function FavoritesPage() {
   const { favoriteTransactionIds } = useAppStore()
   const favoriteTransactions = transactions.filter((t) =>
     favoriteTransactionIds.includes(t.id)
   )
-
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <Navbar />
       <ProfileSidebar />
-
       <div className="flex-1">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <h1 className="text-3xl font-bold text-gray-900 mb-12">Favourite Transactions</h1>
-
           {favoriteTransactions.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-24">
               <div className="w-48 h-48 bg-red-100 rounded-full flex items-center justify-center mb-8">
@@ -74,7 +69,6 @@ export default function FavoritesPage() {
           )}
         </div>
       </div>
-
       <Footer />
     </div>
   )

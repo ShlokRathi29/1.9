@@ -4,14 +4,12 @@ export interface City {
   icon: string
   localitiesCount: number
 }
-
 export interface Locality {
   id: string
   name: string
   cityId: string
   saleCount: number
 }
-
 export interface Project {
   id: string
   name: string
@@ -19,18 +17,16 @@ export interface Project {
   saleCount: number
   isRERA: boolean
 }
-
 export interface Transaction {
   id: string
   projectId: string
   projectName: string
   date: string
-  type: 'Sale' | 'Rent'
+  type: 'Sale' | 'Rent' | 'Mortgage'
   floorTower: string
   unit: string
   amount: string
 }
-
 export interface User {
   id: string
   name: string
@@ -39,7 +35,6 @@ export interface User {
   tokens: number
   avatar?: string
 }
-
 export interface Plan {
   id: string
   name: string
@@ -47,12 +42,6 @@ export interface Plan {
   transactions: number
   description: string
   recommended?: boolean
-}
-
-export interface CartItem {
-  projectId: string
-  projectName: string
-  tokens: number
 }
 
 export interface ViewedTransaction {

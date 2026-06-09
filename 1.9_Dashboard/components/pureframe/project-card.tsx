@@ -1,13 +1,11 @@
 import { ChevronRight } from "lucide-react"
 import Link from "next/link"
-
 interface ProjectCardProps {
   name: string
   saleTxns: number
   hasRera?: boolean
   href: string
 }
-
 export function ProjectCard({ name, saleTxns, hasRera = false, href }: ProjectCardProps) {
   return (
     <Link

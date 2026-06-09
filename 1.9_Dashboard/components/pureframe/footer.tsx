@@ -1,13 +1,12 @@
 import Link from "next/link"
 import { Facebook, Twitter, Linkedin, Instagram, Youtube } from "lucide-react"
 import { PureframeLogo } from "@/components/pureframe-logo"
-
 export function Footer() {
   return (
     <footer className="bg-gray-900 text-white">
       <div className="mx-auto max-w-7xl px-4 py-12">
         <div className="grid gap-8 md:grid-cols-4">
-          {/* Logo Section */}
+          {}
           <div>
             <div className="flex items-center gap-2">
               <div className="flex h-8 w-8 items-center justify-center text-orange-500">
@@ -16,8 +15,7 @@ export function Footer() {
               <span className="text-xl font-bold">Pureframe Labs</span>
             </div>
           </div>
-
-          {/* Services */}
+          {}
           <div>
             <h4 className="mb-4 text-sm font-semibold uppercase tracking-wider">
               Services
@@ -35,18 +33,13 @@ export function Footer() {
               </li>
             </ul>
           </div>
-
-          {/* Company */}
+          {}
           <div>
             <h4 className="mb-4 text-sm font-semibold uppercase tracking-wider">
               Company
             </h4>
             <ul className="space-y-2 text-sm text-gray-400">
-              <li>
-                <Link href="#" className="hover:text-white">
-                  Blogs
-                </Link>
-              </li>
+
               <li>
                 <Link href="#" className="hover:text-white">
                   FAQs
@@ -69,8 +62,7 @@ export function Footer() {
               </li>
             </ul>
           </div>
-
-          {/* Social Media */}
+          {}
           <div>
             <h4 className="mb-4 text-sm font-semibold">
               Follow us on social media
@@ -95,8 +87,7 @@ export function Footer() {
           </div>
         </div>
       </div>
-
-      {/* Copyright */}
+      {}
       <div className="border-t border-gray-800">
         <div className="mx-auto max-w-7xl px-4 py-4">
           <p className="text-center text-sm text-gray-500">

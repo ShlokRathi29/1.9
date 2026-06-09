@@ -1,9 +1,7 @@
 "use client"
-
 import { Home, ChevronRight, Star, Calendar, MapPin, Building2, TrendingUp } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
-
 interface ProjectDetailHeaderProps {
   projectName: string
   location: string
@@ -18,7 +16,6 @@ interface ProjectDetailHeaderProps {
   lastSoldDate: string
   lastSoldPrice: string
 }
-
 export function ProjectDetailHeader({
   projectName,
   location,
@@ -35,7 +32,7 @@ export function ProjectDetailHeader({
 }: ProjectDetailHeaderProps) {
   return (
     <div className="bg-white border-b border-gray-200">
-      {/* Breadcrumb */}
+      {}
       <div className="bg-gray-100 py-2 px-4">
         <div className="max-w-7xl mx-auto flex items-center gap-2 text-sm text-gray-600">
           <Link href="/" className="flex items-center gap-1 hover:text-orange-500">
@@ -48,18 +45,16 @@ export function ProjectDetailHeader({
           <Link href={`/location/${cityName}/${location}/1`} className="hover:text-orange-500">{location}</Link>
         </div>
       </div>
-
-      {/* Project Info */}
+      {}
       <div className="max-w-7xl mx-auto px-4 py-6">
         <div className="flex flex-col lg:flex-row gap-6">
-          {/* Project Image */}
+          {}
           <div className="lg:w-1/4">
             <div className="bg-gradient-to-br from-orange-100 to-orange-50 rounded-lg p-4 h-40 flex items-center justify-center">
               <Building2 className="h-20 w-20 text-orange-400" />
             </div>
           </div>
-
-          {/* Project Details */}
+          {}
           <div className="lg:w-3/4">
             <div className="flex items-start justify-between mb-4">
               <div>
@@ -70,8 +65,7 @@ export function ProjectDetailHeader({
                 </p>
               </div>
             </div>
-
-            {/* Stats Grid */}
+            {}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
               <div>
                 <p className="text-xs text-gray-500 mb-1">Total Area</p>
@@ -97,8 +91,7 @@ export function ProjectDetailHeader({
                 </p>
               </div>
             </div>
-
-            {/* Second Row */}
+            {}
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
               <div>
                 <p className="text-xs text-gray-500 mb-1">Expected Pricing</p>
@@ -118,8 +111,7 @@ export function ProjectDetailHeader({
                 </p>
               </div>
             </div>
-
-            {/* Last Sold */}
+            {}
             <div className="flex items-center gap-2 text-orange-500 text-sm">
               <span className="text-orange-400">↓</span>
               <span>Last sold - {lastSoldDate} - Rs. {lastSoldPrice}</span>
@@ -127,8 +119,7 @@ export function ProjectDetailHeader({
             </div>
           </div>
         </div>
-
-        {/* Search Suggestion */}
+        {}
         <div className="mt-6 bg-blue-50 rounded-lg p-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="bg-blue-100 rounded-full p-2">

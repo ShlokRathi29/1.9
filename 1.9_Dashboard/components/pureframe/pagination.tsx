@@ -1,15 +1,12 @@
 "use client"
-
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
-
 interface PaginationProps {
   currentPage: number
   totalPages: number
   totalTransactions: number
   onPageChange?: (page: number) => void
 }
-
 export function Pagination({
   currentPage = 1,
   totalPages = 1,
@@ -18,7 +15,6 @@ export function Pagination({
 }: PaginationProps) {
   const startItem = Math.min((currentPage - 1) * 10 + 1, totalTransactions)
   const endItem = Math.min(currentPage * 10, totalTransactions)
-
   const getVisiblePages = () => {
     const pages: (number | '...')[] = []
     if (totalPages <= 7) {
@@ -32,7 +28,6 @@ export function Pagination({
     }
     return pages
   }
-
   return (
     <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3">
       <div className="text-sm text-gray-700">

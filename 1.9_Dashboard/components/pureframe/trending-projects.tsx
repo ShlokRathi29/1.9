@@ -1,26 +1,21 @@
 "use client"
-
 import { ChevronRight } from "lucide-react"
 import Link from "next/link"
-
 interface TrendingProject {
   name: string
   href: string
   hasRera: boolean
 }
-
 interface TrendingProjectsProps {
   location: string
   projects: TrendingProject[]
 }
-
 export function TrendingProjects({ location, projects }: TrendingProjectsProps) {
   return (
     <div className="bg-white rounded-lg border border-gray-200 p-6">
       <h2 className="text-lg font-semibold text-gray-900 mb-6">
         Trending projects in {location}
       </h2>
-      
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {projects.map((project, index) => (
           <Link

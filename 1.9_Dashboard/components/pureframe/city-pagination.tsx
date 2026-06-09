@@ -1,21 +1,16 @@
 "use client"
-
 import { ChevronLeft, ChevronRight } from "lucide-react"
-
 interface CityPaginationProps {
   currentPage: number
   totalPages: number
   onPageChange?: (page: number) => void
 }
-
 export function CityPagination({ currentPage, totalPages, onPageChange }: CityPaginationProps) {
   const visiblePages = []
   const maxVisible = 5
-
   for (let i = 1; i <= Math.min(maxVisible, totalPages); i++) {
     visiblePages.push(i)
   }
-
   return (
     <div className="flex items-center justify-between py-6 px-4">
       <button
@@ -26,7 +21,6 @@ export function CityPagination({ currentPage, totalPages, onPageChange }: CityPa
         <ChevronLeft className="w-4 h-4" />
         Previous
       </button>
-
       <div className="flex items-center gap-1">
         {visiblePages.map((page) => (
           <button
@@ -42,7 +36,6 @@ export function CityPagination({ currentPage, totalPages, onPageChange }: CityPa
           </button>
         ))}
       </div>
-
       <button
         onClick={() => onPageChange&&onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}

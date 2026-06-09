@@ -1,20 +1,17 @@
 "use client"
-
 import { Home, Info, ChevronDown } from "lucide-react"
 import Link from "next/link"
-
 interface CityBannerProps {
   cityName: string
   localityCount: number
 }
-
 export function CityBanner({ cityName, localityCount }: CityBannerProps) {
   return (
     <div className="bg-gradient-to-r from-[#1a3a5c] to-[#2d5a87] text-white">
       <div className="max-w-7xl mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            {/* Building Icon */}
+            {}
             <div className="w-16 h-16 bg-white/10 rounded-lg flex items-center justify-center">
               <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect x="8" y="12" width="10" height="20" fill="#f97316" rx="1" />
@@ -35,7 +32,6 @@ export function CityBanner({ cityName, localityCount }: CityBannerProps) {
                 <rect x="28" y="23" width="2" height="2" fill="white" />
               </svg>
             </div>
-            
             <div>
               <div className="flex items-center gap-2 text-sm text-white/70 mb-1">
                 <Link href="/" className="hover:text-white flex items-center gap-1">
@@ -58,7 +54,6 @@ export function CityBanner({ cityName, localityCount }: CityBannerProps) {
               <p className="text-xs text-white/60 mt-1">Based on # of sale registrations</p>
             </div>
           </div>
-          
           <div className="flex items-center gap-4">
             <button className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20">
               <Info className="w-4 h-4" />

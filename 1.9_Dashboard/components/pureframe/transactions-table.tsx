@@ -1,8 +1,6 @@
 "use client"
-
 import { Lock } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
-
 interface Transaction {
   id: number
   date: string
@@ -13,7 +11,6 @@ interface Transaction {
   unit: string
   amount: string | null
 }
-
 const transactions: Transaction[] = [
   { id: 1, date: "17 Mar, 2026", project: "Geras Trinity ...", location: "Kharadi", type: "Mortgage", floorTower: "-", unit: "", amount: null },
   { id: 2, date: "16 Mar, 2026", project: "Geras Trinity ...", location: "Kharadi", type: "Sale", floorTower: "14, II", unit: "1506", amount: null },
@@ -41,7 +38,6 @@ const transactions: Transaction[] = [
   { id: 24, date: "1 Aug, 2025", project: "Geras Trinity ...", location: "Kharadi", type: "Rent", floorTower: "6", unit: "602", amount: null },
   { id: 25, date: "30 Jul, 2025", project: "Geras Trinity ...", location: "Kharadi", type: "Rent", floorTower: "1", unit: "", amount: null },
 ]
-
 function getTypeBadgeStyle(type: string) {
   switch (type) {
     case "Sale":
@@ -54,7 +50,6 @@ function getTypeBadgeStyle(type: string) {
       return "bg-gray-100 text-gray-700 hover:bg-gray-100"
   }
 }
-
 export function TransactionsTable() {
   return (
     <div className="flex-1 overflow-x-auto">

@@ -1,14 +1,6 @@
-/**
- * projectService — reads from DB2 (external, read-only).
- * All functions have TODO comments showing where real DB2 SQL goes.
- * Until DB2 is available, mock data is returned so the API is functional.
- */
 import { db2Query } from '../db/db2'
 import { env } from '../config/env'
 import type { TransactionFilter } from '../validators/schemas'
-
-// ─── Mock data (remove when DB2 is connected) ─────────────────────────────────
-
 const MOCK_CITIES = [
   { id: '1', name: 'Mumbai',    localities_count: 180 },
   { id: '2', name: 'Pune',      localities_count: 282 },
@@ -19,7 +11,6 @@ const MOCK_CITIES = [
   { id: '7', name: 'Delhi',     localities_count: 210 },
   { id: '8', name: 'Ahmedabad', localities_count: 134 },
 ]
-
 const MOCK_LOCALITIES = [
   { id: '1-1',  city_id: '2', name: 'Wagholi',           sale_count: 5506 },
   { id: '1-2',  city_id: '2', name: 'Hinjewadi',         sale_count: 4190 },
@@ -46,7 +37,6 @@ const MOCK_LOCALITIES = [
   { id: '3-1',  city_id: '3', name: 'Whitefield',        sale_count: 5100 },
   { id: '3-2',  city_id: '3', name: 'Electronic City',   sale_count: 4300 },
 ]
-
 const MOCK_PROJECTS = [
   { id: '1',  locality_id: '1-1',  name: 'Geras Island of Joy',          sale_count: 520,  is_rera: true,  developer: 'Geras Group',        rera_numbers: ['P52100012345'] },
   { id: '2',  locality_id: '1-1',  name: 'VI Yashwin Enchante Phase 1',  sale_count: 433,  is_rera: true,  developer: 'VI Realty',           rera_numbers: ['P52100023456'] },
@@ -58,7 +48,6 @@ const MOCK_PROJECTS = [
   { id: '14', locality_id: '1-12', name: 'Kohinoor Flamante',            sale_count: 280,  is_rera: true,  developer: 'Kohinoor Group',      rera_numbers: ['P52100089012'] },
   { id: '15', locality_id: '1-12', name: 'Vilas Javdekar Paloma',        sale_count: 195,  is_rera: false, developer: 'Vilas Javdekar',      rera_numbers: [] },
 ]
-
 const MOCK_TRANSACTIONS = [
   { id: '1',  project_id: '13', project_name: 'Geras Trinity Towers', date: '17 Mar, 2026', type: 'Sale',     floor_tower: '14, II', unit: '1506', amount_lakhs: 92.50 },
   { id: '2',  project_id: '13', project_name: 'Geras Trinity Towers', date: '16 Mar, 2026', type: 'Mortgage', floor_tower: '-',      unit: '1407', amount_lakhs: 65.00 },
@@ -71,22 +60,14 @@ const MOCK_TRANSACTIONS = [
   { id: '9',  project_id: '9',  project_name: 'Paranjape Blue Ridge',  date: '1 Dec, 2025',  type: 'Sale',     floor_tower: '2',      unit: '205',  amount_lakhs: 62.75 },
   { id: '10', project_id: '13', project_name: 'Geras Trinity Towers',  date: '3 Jan, 2026',  type: 'Sale',     floor_tower: '9, III', unit: '904',  amount_lakhs: 88.00 },
 ]
-
-// ─── Service ──────────────────────────────────────────────────────────────────
-
 function useMock(): boolean {
   return !env.DB2_URL
 }
-
 export const projectService = {
   async getCities() {
     if (useMock()) return MOCK_CITIES
-
-    // TODO: replace with real DB2 query
-    // return db2Query('SELECT id, name, localities_count FROM cities ORDER BY name')
     return MOCK_CITIES
   },
-
   async getCityLocalities(cityId: string, page: number, limit: number) {
     if (useMock()) {
       const rows = MOCK_LOCALITIES.filter((l) => l.city_id === cityId)
@@ -95,19 +76,12 @@ export const projectService = {
       const data = rows.slice((page - 1) * limit, page * limit)
       return { data, total, pages: Math.ceil(total / limit) }
     }
-
-    // TODO: replace with real DB2 query
-    // const rows = await db2Query(
-    //   'SELECT id, name, sale_count FROM localities WHERE city_id = $1 ORDER BY sale_count DESC LIMIT $2 OFFSET $3',
-    //   [cityId, limit, (page - 1) * limit]
-    // )
     const rows = MOCK_LOCALITIES.filter((l) => l.city_id === cityId)
       .sort((a, b) => b.sale_count - a.sale_count)
     const total = rows.length
     const data = rows.slice((page - 1) * limit, page * limit)
     return { data, total, pages: Math.ceil(total / limit) }
   },
-
   async getLocalityProjects(localityId: string, page: number, limit: number) {
     if (useMock()) {
       const rows = MOCK_PROJECTS.filter((p) => p.locality_id === localityId)
@@ -116,21 +90,13 @@ export const projectService = {
       const data = rows.slice((page - 1) * limit, page * limit)
       return { data, total, pages: Math.ceil(total / limit) }
     }
-
-    // TODO: replace with real DB2 query
-    // const rows = await db2Query(
-    //   'SELECT id, name, sale_count, is_rera, developer FROM projects WHERE locality_id = $1 ORDER BY sale_count DESC LIMIT $2 OFFSET $3',
-    //   [localityId, limit, (page - 1) * limit]
-    // )
     const rows = MOCK_PROJECTS.filter((p) => p.locality_id === localityId)
       .sort((a, b) => b.sale_count - a.sale_count)
     const total = rows.length
     const data = rows.slice((page - 1) * limit, page * limit)
     return { data, total, pages: Math.ceil(total / limit) }
   },
-
   async searchProjects(city: string, q: string, page: number, limit: number) {
-    // Helper: join project with locality + city names for URL building
     const enrich = (p: typeof MOCK_PROJECTS[number]) => {
       const locality = MOCK_LOCALITIES.find((l) => l.id === p.locality_id)
       const cityObj  = MOCK_CITIES.find((c) => c.id === locality?.city_id)
@@ -140,7 +106,6 @@ export const projectService = {
         city_name: cityObj?.name ?? '',
       }
     }
-
     if (useMock()) {
       const rows = MOCK_PROJECTS
         .filter((p) => p.name.toLowerCase().includes(q.toLowerCase()))
@@ -149,7 +114,6 @@ export const projectService = {
       const data = rows.slice((page - 1) * limit, page * limit)
       return { data, total, pages: Math.ceil(total / limit) }
     }
-
     // TODO: replace with real DB2 query (join with localities + cities for city filter)
     // const rows = await db2Query(
     //   `SELECT p.id, p.name, p.sale_count, p.is_rera, l.name AS locality_name, c.name AS city_name
@@ -166,17 +130,14 @@ export const projectService = {
     const data = rows.slice((page - 1) * limit, page * limit)
     return { data, total, pages: Math.ceil(total / limit) }
   },
-
   async getProjectById(projectId: string) {
     if (useMock()) {
       return MOCK_PROJECTS.find((p) => p.id === projectId) ?? null
     }
-
     // TODO: replace with real DB2 query (fetch full project details)
     // const [project] = await db2Query('SELECT * FROM projects WHERE id = $1', [projectId])
     return MOCK_PROJECTS.find((p) => p.id === projectId) ?? null
   },
-
   async getProjectTransactions(projectId: string, filters: TransactionFilter) {
     if (useMock()) {
       let rows = MOCK_TRANSACTIONS.filter((t) => t.project_id === projectId)
@@ -188,13 +149,6 @@ export const projectService = {
       )
       return { data, total, pages: Math.ceil(total / filters.limit) }
     }
-
-    // TODO: replace with real DB2 query
-    // Build dynamic SQL based on filters
-    // const clauses: string[] = ['project_id = $1']
-    // const params: any[] = [projectId]
-    // if (filters.type) { clauses.push(`type = $${params.length + 1}`); params.push(filters.type) }
-    // ...etc
     let rows = MOCK_TRANSACTIONS.filter((t) => t.project_id === projectId)
     if (filters.type) rows = rows.filter((t) => t.type === filters.type)
     const total = rows.length

@@ -1,6 +1,5 @@
 import { ChevronRight } from "lucide-react"
 import Link from "next/link"
-
 export function TrendsSection() {
   return (
     <div className="border-t border-gray-200 bg-white py-6">
@@ -9,7 +8,7 @@ export function TrendsSection() {
           View Rent & Sale Trends in -
         </h3>
         <div className="grid gap-4 md:grid-cols-2">
-          {/* Project Trend */}
+          {}
           <Link
             href="#"
             className="flex items-center justify-between rounded-lg border border-gray-200 p-4 hover:bg-gray-50"
@@ -33,8 +32,7 @@ export function TrendsSection() {
             </div>
             <ChevronRight className="h-5 w-5 text-gray-400" />
           </Link>
-
-          {/* Locality Trend */}
+          {}
           <Link
             href="#"
             className="flex items-center justify-between rounded-lg border border-gray-200 p-4 hover:bg-gray-50"
@@ -57,8 +55,7 @@ export function TrendsSection() {
             <ChevronRight className="h-5 w-5 text-gray-400" />
           </Link>
         </div>
-
-        {/* Info Text */}
+        {}
         <p className="mt-6 text-sm text-gray-600">
           Pureframe Labs helps you negotiate the best price based on the latest property
           transactions in any project. We have 6 sales in Geras Trinity Towers

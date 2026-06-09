@@ -1,24 +1,19 @@
 "use client"
-
 import { Building2 } from "lucide-react"
-
 interface RERANumber {
   id: string
   imageUrl?: string
 }
-
 interface RERANumbersProps {
   projectName: string
   reraNumbers: RERANumber[]
 }
-
 export function RERANumbers({ projectName, reraNumbers }: RERANumbersProps) {
   return (
     <div className="bg-white rounded-lg border border-gray-200 p-6">
       <h2 className="text-lg font-semibold text-gray-900 mb-6">
         RERA Numbers for {projectName}
       </h2>
-      
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
         {reraNumbers.map((rera, index) => (
           <div key={index} className="text-center">
@@ -29,9 +24,8 @@ export function RERANumbers({ projectName, reraNumbers }: RERANumbersProps) {
           </div>
         ))}
       </div>
-
       <p className="mt-4 text-xs text-gray-400">
-        This project is registered under MahaRERA as available at: https://maharera.mahaonline.gov.in
+        This project is registered under MahaRERA as available at: https:
       </p>
     </div>
   )

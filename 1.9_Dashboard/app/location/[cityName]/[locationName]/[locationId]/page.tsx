@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
 import { Navbar } from '@/components/navbar'
@@ -13,25 +12,20 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { browse } from '@/lib/api'
 import { useToast } from '@/hooks/use-toast'
 import { cities as mockCities, localities as mockLocalities, projects as mockProjects } from '@/lib/mock-data'
-
 const ITEMS_PER_PAGE = 30
-
 export default function LocationPage() {
   const params = useParams()
   const { toast } = useToast()
   const cityName = decodeURIComponent(params.cityName as string)
   const locationName = decodeURIComponent((params.locationName as string).replace(/-/g, ' '))
   const locationId = params.locationId as string
-
   const [projectsList, setProjectsList] = useState<any[]>([])
   const [totalItems, setTotalItems] = useState(0)
   const [totalPages, setTotalPages] = useState(1)
   const [currentPage, setCurrentPage] = useState(1)
   const [loading, setLoading] = useState(true)
-
   const city = mockCities.find((c) => c.name.toLowerCase() === cityName.toLowerCase())
   const cityIdNum = city ? parseInt(city.id, 10) : 2
-
   useEffect(() => {
     setLoading(true)
     browse.getLocalityProjects(locationId, currentPage, ITEMS_PER_PAGE)
@@ -51,12 +45,10 @@ export default function LocationPage() {
       })
       .finally(() => setLoading(false))
   }, [locationId, currentPage])
-
   const handlePageChange = (page: number) => {
     setCurrentPage(page)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
-
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       <Navbar />
@@ -67,7 +59,6 @@ export default function LocationPage() {
         locationName={locationName}
         projectCount={totalItems}
       />
-
       <main className="flex-1 max-w-7xl mx-auto px-4 py-6 w-full">
         {loading ? (
           <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
@@ -91,7 +82,6 @@ export default function LocationPage() {
                 />
               ))}
             </div>
-
             {totalPages > 1 && (
               <CityPagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
             )}
@@ -102,7 +92,6 @@ export default function LocationPage() {
           </div>
         )}
       </main>
-
       <FAQSection locationName={locationName} />
       <Footer />
     </div>

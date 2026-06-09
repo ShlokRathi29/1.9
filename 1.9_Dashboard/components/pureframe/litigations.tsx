@@ -1,14 +1,11 @@
 "use client"
-
 import { Scale, FileX } from "lucide-react"
-
 interface LitigationsProps {
   projectName: string
   civilCases: number
   blankCases: number
   totalCases: number
 }
-
 export function Litigations({ projectName, civilCases, blankCases, totalCases }: LitigationsProps) {
   return (
     <div className="bg-white rounded-lg border border-gray-200 p-6">
@@ -20,7 +17,6 @@ export function Litigations({ projectName, civilCases, blankCases, totalCases }:
           Total cases: <span className="text-orange-500 font-medium">{totalCases}</span>
         </span>
       </div>
-      
       <div className="flex gap-8">
         <div className="flex items-center gap-3">
           <div className="bg-blue-100 rounded-lg p-3">
@@ -31,7 +27,6 @@ export function Litigations({ projectName, civilCases, blankCases, totalCases }:
             <p className="text-xl font-bold text-gray-900">{civilCases}</p>
           </div>
         </div>
-        
         <div className="flex items-center gap-3">
           <div className="bg-gray-100 rounded-lg p-3">
             <FileX className="h-6 w-6 text-gray-600" />

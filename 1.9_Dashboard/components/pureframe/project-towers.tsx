@@ -1,7 +1,5 @@
 "use client"
-
 import { QrCode } from "lucide-react"
-
 interface Tower {
   name: string
   reraNumber: string
@@ -10,16 +8,13 @@ interface Tower {
   totalUnits: string
   percentSold: number
 }
-
 interface ProjectTowersProps {
   towers: Tower[]
 }
-
 export function ProjectTowers({ towers }: ProjectTowersProps) {
   return (
     <div className="bg-white rounded-lg border border-gray-200 p-6">
       <h2 className="text-lg font-semibold text-gray-900 mb-6">{towers[0]?.reraNumber?.split("P")[0]} Towers</h2>
-      
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {towers.map((tower, index) => (
           <div key={index} className="border border-gray-200 rounded-lg p-4">
@@ -31,12 +26,11 @@ export function ProjectTowers({ towers }: ProjectTowersProps) {
                   <span className="text-xs font-medium text-gray-700">{tower.percentSold}%</span>
                 </div>
               </div>
-              {/* QR Code placeholder */}
+              {}
               <div className="bg-gray-100 p-2 rounded">
                 <QrCode className="h-12 w-12 text-gray-400" />
               </div>
             </div>
-            
             <div className="space-y-2 text-sm">
               <div>
                 <span className="text-gray-500">RERA NO.: </span>
@@ -47,7 +41,6 @@ export function ProjectTowers({ towers }: ProjectTowersProps) {
                 <span className="text-gray-700">{tower.completionDate}</span>
               </div>
             </div>
-
             <div className="mt-4 pt-4 border-t border-gray-100">
               <div className="flex items-center justify-between">
                 <div>

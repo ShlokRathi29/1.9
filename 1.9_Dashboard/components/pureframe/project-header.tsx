@@ -1,12 +1,10 @@
 import { Bell, ArrowUpRight, FileSpreadsheet, Building } from "lucide-react"
 import { Button } from "@/components/ui/button"
-
 interface ProjectHeaderProps {
   projectName: string
   location: string
   totalTransactions: number
 }
-
 export function ProjectHeader({
   projectName = "Geras Trinity Towers",
   location = "Kharadi",
@@ -15,7 +13,7 @@ export function ProjectHeader({
   return (
     <div className="border-b border-gray-200 bg-white py-4">
       <div className="mx-auto max-w-7xl px-4">
-        {/* Project Info */}
+        {}
         <div className="mb-4 flex items-start justify-between">
           <div className="flex items-start gap-4">
             <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-orange-100">
@@ -44,7 +42,6 @@ export function ProjectHeader({
               </div>
             </div>
           </div>
-
           <div className="flex items-center gap-4">
             <Button variant="ghost" className="text-gray-600 hover:text-gray-900">
               <svg
@@ -67,8 +64,7 @@ export function ProjectHeader({
             </Button>
           </div>
         </div>
-
-        {/* Transaction Count */}
+        {}
         <p className="text-sm font-medium text-gray-900">
           Showing {totalTransactions} transactions
         </p>

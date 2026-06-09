@@ -1,12 +1,10 @@
 'use client'
-
 import { Bell } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Navbar } from '@/components/navbar'
 import { ProfileSidebar } from '@/components/profile-sidebar'
 import { Footer } from '@/components/pureframe/footer'
-
 const mockAlerts = [
   {
     id: '1',
@@ -30,17 +28,14 @@ const mockAlerts = [
     timestamp: '3 days ago',
   },
 ]
-
 export default function AlertsPage() {
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <Navbar />
       <ProfileSidebar />
-
       <div className="flex-1">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <h1 className="text-3xl font-bold text-gray-900 mb-8">My Alerts</h1>
-
           <div className="space-y-4">
             {mockAlerts.map((alert) => (
               <Card key={alert.id} className="border border-gray-200 hover:shadow-lg transition-shadow">
@@ -70,7 +65,6 @@ export default function AlertsPage() {
               </Card>
             ))}
           </div>
-
           {mockAlerts.length === 0 && (
             <div className="flex flex-col items-center justify-center py-16">
               <Bell className="w-16 h-16 text-gray-300 mb-4" />
@@ -80,7 +74,6 @@ export default function AlertsPage() {
           )}
         </div>
       </div>
-
       <Footer />
     </div>
   )

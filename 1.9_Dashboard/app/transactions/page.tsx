@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useEffect, useCallback } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { Suspense } from 'react'
@@ -26,14 +25,12 @@ import { projects as mockProjects } from '@/lib/mock-data'
 import { projects as projectsApi } from '@/lib/api'
 import { useAppStore } from '@/lib/store'
 import { useToast } from '@/hooks/use-toast'
-
 function TransactionsContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const { toast } = useToast()
   const projectId = searchParams.get('projectId')
   const { addViewedTransaction } = useAppStore()
-
   const [currentPage, setCurrentPage] = useState(1)
   const [searchQuery, setSearchQuery] = useState('')
   const [transactionsList, setTransactionsList] = useState<any[]>([])
@@ -41,9 +38,7 @@ function TransactionsContent() {
   const [totalPages, setTotalPages] = useState(1)
   const [loading, setLoading] = useState(true)
   const [filters, setFilters] = useState<Record<string, string>>({})
-
   const mockProject = mockProjects.find((p) => p.id === projectId)
-
   const fetchTransactions = useCallback(async (page: number, activeFilters: Record<string, string>) => {
     if (!projectId) { setLoading(false); return }
     setLoading(true)
@@ -60,21 +55,17 @@ function TransactionsContent() {
       setLoading(false)
     }
   }, [projectId])
-
   useEffect(() => {
     fetchTransactions(currentPage, filters)
   }, [projectId, currentPage, filters])
-
   const handlePageChange = (page: number) => {
     setCurrentPage(page)
     fetchTransactions(page, filters)
   }
-
   const handleFilterClear = () => {
     setFilters({})
     setCurrentPage(1)
   }
-
   const handleExportCSV = () => {
     const unlocked = transactionsList.filter((t) => !t.locked)
     if (unlocked.length === 0) {
@@ -91,18 +82,15 @@ function TransactionsContent() {
     el.click()
     toast({ title: 'Downloaded', description: 'Transactions exported as CSV.' })
   }
-
   function getTypeBadgeClass(type: string) {
     if (type === 'Sale') return 'bg-orange-100 text-orange-700'
     if (type === 'Rent') return 'bg-green-100 text-green-700'
     return 'bg-blue-100 text-blue-700'
   }
-
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       <Navbar />
       <ProfileSidebar />
-
       {mockProject && (
         <div className="bg-white border-b border-gray-200 py-4">
           <div className="max-w-7xl mx-auto px-4 flex items-center justify-between flex-wrap gap-3">
@@ -121,7 +109,6 @@ function TransactionsContent() {
           </div>
         </div>
       )}
-
       <div className="flex-1 max-w-7xl mx-auto px-4 py-6 w-full">
         <div className="flex gap-6">
           <Filters onClearAll={handleFilterClear} />
@@ -140,7 +127,6 @@ function TransactionsContent() {
                   </div>
                 </div>
               )}
-
               <div className="overflow-x-auto">
                 <Table>
                   <TableHeader className="bg-gray-50">
@@ -195,7 +181,6 @@ function TransactionsContent() {
                   </TableBody>
                 </Table>
               </div>
-
               <Pagination
                 currentPage={currentPage}
                 totalPages={totalPages}
@@ -206,13 +191,11 @@ function TransactionsContent() {
           </div>
         </div>
       </div>
-
       <TrendsSection />
       <Footer />
     </div>
   )
 }
-
 export default function TransactionsPage() {
   return (
     <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="text-gray-500">Loading...</div></div>}>

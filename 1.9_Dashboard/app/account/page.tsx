@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
@@ -20,7 +19,6 @@ import { Footer } from '@/components/pureframe/footer'
 import { wallet as walletApi } from '@/lib/api'
 import { useAppStore } from '@/lib/store'
 import { useToast } from '@/hooks/use-toast'
-
 export default function AccountPage() {
   const router = useRouter()
   const { toast } = useToast()
@@ -28,11 +26,9 @@ export default function AccountPage() {
   const [balance, setBalance] = useState<number | null>(null)
   const [transactions, setTransactions] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
-
   useEffect(() => {
     const token = localStorage.getItem('pureframe_token')
     if (!token) { setLoading(false); return }
-
     walletApi.getBalance()
       .then((res) => {
         setBalance(res.balance)
@@ -45,13 +41,11 @@ export default function AccountPage() {
       })
       .finally(() => setLoading(false))
   }, [])
-
   function getTypeBadgeClass(type: string) {
     if (type === 'CREDIT') return 'bg-green-100 text-green-700'
     if (type === 'DEBIT') return 'bg-red-100 text-red-700'
     return 'bg-gray-100 text-gray-700'
   }
-
   function formatDate(dateStr: string) {
     try {
       return new Date(dateStr).toLocaleDateString('en-IN', {
@@ -59,23 +53,19 @@ export default function AccountPage() {
       })
     } catch { return dateStr }
   }
-
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <Navbar />
       <ProfileSidebar />
-
       <div className="flex-1">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <h1 className="text-3xl font-bold text-gray-900 mb-8">My Account</h1>
-
           <Tabs defaultValue="history" className="w-full">
             <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="orders">Orders</TabsTrigger>
               <TabsTrigger value="agreements">Agreements</TabsTrigger>
               <TabsTrigger value="history">Transactions History</TabsTrigger>
             </TabsList>
-
             <TabsContent value="orders" className="mt-8">
               <div className="flex flex-col items-center justify-center py-24">
                 <div className="w-48 h-48 bg-blue-100 rounded-full flex items-center justify-center mb-8">
@@ -87,7 +77,6 @@ export default function AccountPage() {
                 <p className="text-gray-600">All your past orders will appear here</p>
               </div>
             </TabsContent>
-
             <TabsContent value="agreements" className="mt-8">
               <div className="flex flex-col items-center justify-center py-24">
                 <div className="w-48 h-48 bg-purple-100 rounded-full flex items-center justify-center mb-8">
@@ -99,7 +88,6 @@ export default function AccountPage() {
                 <p className="text-gray-600">Your agreements will appear here</p>
               </div>
             </TabsContent>
-
             <TabsContent value="history" className="mt-8">
               {loading ? (
                 <div className="space-y-3">
@@ -109,7 +97,7 @@ export default function AccountPage() {
                 </div>
               ) : (
                 <>
-                  {/* Wallet balance card */}
+                  {}
                   {balance !== null && (
                     <div className="bg-orange-50 border border-orange-100 rounded-xl p-6 mb-6 flex items-center justify-between">
                       <div>
@@ -125,7 +113,6 @@ export default function AccountPage() {
                       </Button>
                     </div>
                   )}
-
                   {transactions.length > 0 ? (
                     <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
                       <Table>
@@ -178,7 +165,6 @@ export default function AccountPage() {
               )}
             </TabsContent>
           </Tabs>
-
           <div className="mt-8 text-center">
             <Button onClick={() => router.push('/')} className="bg-orange-500 hover:bg-orange-600 text-white">
               Back Home
@@ -186,7 +172,6 @@ export default function AccountPage() {
           </div>
         </div>
       </div>
-
       <Footer />
     </div>
   )

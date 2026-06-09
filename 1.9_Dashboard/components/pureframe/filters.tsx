@@ -1,16 +1,13 @@
 "use client"
-
 import { Calendar, Info } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Switch } from "@/components/ui/switch"
 import { Button } from "@/components/ui/button"
-
 interface FiltersProps {
   onClearAll?: () => void
 }
-
 export function Filters({ onClearAll }: FiltersProps) {
   return (
     <div className="w-[240px] shrink-0">
@@ -24,8 +21,7 @@ export function Filters({ onClearAll }: FiltersProps) {
             Clear all
           </button>
         </div>
-
-        {/* Transaction Type */}
+        {}
         <div className="mb-6">
           <h4 className="mb-3 text-xs font-semibold uppercase tracking-wider text-gray-500">
             Transaction Type
@@ -51,8 +47,7 @@ export function Filters({ onClearAll }: FiltersProps) {
             </div>
           </RadioGroup>
         </div>
-
-        {/* Registration Date */}
+        {}
         <div className="mb-6">
           <h4 className="mb-3 text-xs font-semibold uppercase tracking-wider text-gray-500">
             Registration Date
@@ -74,8 +69,7 @@ export function Filters({ onClearAll }: FiltersProps) {
             </div>
           </div>
         </div>
-
-        {/* Area Range */}
+        {}
         <div className="mb-6">
           <h4 className="mb-3 text-xs font-semibold uppercase tracking-wider text-gray-500">
             Min Area <span className="text-gray-400">(Sq.Ft.)</span>
@@ -86,8 +80,7 @@ export function Filters({ onClearAll }: FiltersProps) {
             <Input placeholder="Max Area" className="border-gray-200" />
           </div>
         </div>
-
-        {/* Floor */}
+        {}
         <div className="mb-6">
           <h4 className="mb-3 flex items-center gap-1 text-xs font-semibold uppercase tracking-wider text-gray-500">
             Floor
@@ -95,8 +88,7 @@ export function Filters({ onClearAll }: FiltersProps) {
           </h4>
           <Input placeholder="Floor" className="border-gray-200" />
         </div>
-
-        {/* Unit */}
+        {}
         <div className="mb-6">
           <h4 className="mb-3 flex items-center gap-1 text-xs font-semibold uppercase tracking-wider text-gray-500">
             Unit
@@ -104,8 +96,7 @@ export function Filters({ onClearAll }: FiltersProps) {
           </h4>
           <Input placeholder="Unit" className="border-gray-200" />
         </div>
-
-        {/* Instant Agreement */}
+        {}
         <div className="mb-6">
           <div className="flex items-center justify-between">
             <h4 className="flex items-center gap-1 text-xs font-semibold uppercase tracking-wider text-gray-500">
@@ -118,8 +109,7 @@ export function Filters({ onClearAll }: FiltersProps) {
             </div>
           </div>
         </div>
-
-        {/* Apply Button */}
+        {}
         <Button className="w-full bg-orange-500 text-white hover:bg-orange-600">
           Apply Filters
         </Button>

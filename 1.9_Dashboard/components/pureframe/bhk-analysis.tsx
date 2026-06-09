@@ -1,5 +1,4 @@
 "use client"
-
 import { useState } from "react"
 import { ChevronDown, Printer, FileSpreadsheet } from "lucide-react"
 import {
@@ -9,7 +8,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-
 interface BHKData {
   type: string
   sizeRange: string
@@ -17,21 +15,17 @@ interface BHKData {
   unitsSold: number
   percentSold: number
 }
-
 interface BHKAnalysisProps {
   projectName: string
   totalUnitsSold: number
   totalUnits: number
   data: BHKData[]
 }
-
 export function BHKAnalysis({ projectName, totalUnitsSold, totalUnits, data }: BHKAnalysisProps) {
   const [selectedBHK, setSelectedBHK] = useState("all")
-
   const filteredData = selectedBHK === "all" 
     ? data 
     : data.filter(d => d.type.toLowerCase().includes(selectedBHK))
-
   return (
     <div className="bg-white rounded-lg border border-gray-200 p-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-6">
@@ -65,8 +59,7 @@ export function BHKAnalysis({ projectName, totalUnitsSold, totalUnits, data }: B
           </span>
         </div>
       </div>
-
-      {/* Summary */}
+      {}
       <div className="flex items-center gap-4 mb-6 p-4 bg-gray-50 rounded-lg">
         <div className="bg-blue-100 rounded-full p-3">
           <svg className="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -86,8 +79,7 @@ export function BHKAnalysis({ projectName, totalUnitsSold, totalUnits, data }: B
           </button>
         </div>
       </div>
-
-      {/* Table */}
+      {}
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>

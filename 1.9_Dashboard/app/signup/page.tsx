@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -11,35 +10,26 @@ import { useToast } from '@/hooks/use-toast'
 import { useAppStore } from '@/lib/store'
 import { auth } from '@/lib/api'
 import { PureframeLogo } from '@/components/pureframe-logo'
-
-// MSG91 Widget ID & Token Auth (from env)
 const WIDGET_ID = process.env.NEXT_PUBLIC_MSG91_WIDGET_ID || ''
 const TOKEN_AUTH = process.env.NEXT_PUBLIC_MSG91_TOKEN_AUTH || ''
-
 declare global {
   interface Window {
     initSendOTP?: (config: any) => void
   }
 }
-
 type VerifyTarget = 'phone' | 'email'
-
 export default function SignupPage() {
   const router = useRouter()
   const { toast } = useToast()
   const { setUser, setTokens } = useAppStore()
-
-  // Form state
   const [form, setForm] = useState({ name: '', email: '', phone: '', password: '' })
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
-
   // OTP verification state
   const [phoneToken, setPhoneToken] = useState('')
   const [emailToken, setEmailToken] = useState('')
   const [isPhoneVerified, setIsPhoneVerified] = useState(false)
   const [isEmailVerified, setIsEmailVerified] = useState(false)
-
   // OTP input state
   const [otpTarget, setOtpTarget] = useState<VerifyTarget | null>(null)
   const [otpCode, setOtpCode] = useState(['', '', '', '', '', ''])
@@ -47,31 +37,23 @@ export default function SignupPage() {
   const [otpVerifying, setOtpVerifying] = useState(false)
   const [countdown, setCountdown] = useState(0)
   const [otpError, setOtpError] = useState('')
-
   // MSG91 exposed methods ref
   const msg91Methods = useRef<any>(null)
   const otpInputRefs = useRef<(HTMLInputElement | null)[]>([])
-
   // Load MSG91 script
   useEffect(() => {
     const urls = [
       'https://verify.msg91.com/otp-provider.js',
       'https://verify.phone91.com/otp-provider.js'
     ]
-
-    // Prevent loading multiple times in React Strict Mode
     if (document.querySelector(`script[src="${urls[0]}"]`) || document.querySelector(`script[src="${urls[1]}"]`)) {
-      console.log('[OTP] MSG91 script already loaded')
       return
     }
-
     let i = 0
     function attempt() {
-      console.log(`[OTP] Loading MSG91 script from: ${urls[i]}`)
       const s = document.createElement('script')
       s.src = urls[i]
       s.async = true
-      s.onload = () => console.log(`[OTP] MSG91 script loaded successfully from: ${urls[i]}`)
       s.onerror = () => {
         console.warn(`[OTP] Failed to load script from: ${urls[i]}`)
         i++
@@ -82,14 +64,11 @@ export default function SignupPage() {
     }
     attempt()
   }, [])
-
-  // Countdown timer
   useEffect(() => {
     if (countdown <= 0) return
     const timer = setInterval(() => setCountdown((c) => c - 1), 1000)
     return () => clearInterval(timer)
   }, [countdown])
-
   const update = (field: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm((prev) => ({ ...prev, [field]: e.target.value }))
     if (field === 'phone') {
@@ -101,15 +80,12 @@ export default function SignupPage() {
       setEmailToken('')
     }
   }
-
   const sanitizePhone = (raw: string) => {
     const cleaned = raw.trim().replace(/[\s\-]/g, '')
     if (cleaned.startsWith('+91')) return cleaned.slice(3)
     if (cleaned.startsWith('91') && cleaned.length === 12) return cleaned.slice(2)
     return cleaned
   }
-
-  // Trigger OTP sending via MSG91 with exposed methods
   const triggerOTP = useCallback((target: VerifyTarget) => {
     let identifier = ''
     if (target === 'phone') {
@@ -126,30 +102,21 @@ export default function SignupPage() {
       }
       identifier = form.email
     }
-
     setOtpTarget(target)
     setOtpCode(['', '', '', '', '', ''])
     setOtpError('')
     setOtpSending(true)
-
     if (!window.initSendOTP) {
       console.error('[OTP] initSendOTP not available on window — script may not have loaded')
       toast({ title: 'Service loading', description: 'OTP service is still loading. Please wait a moment.', variant: 'destructive' })
       setOtpSending(false)
       return
     }
-
-    console.log('[OTP] Triggering OTP for:', target, 'identifier:', identifier)
-    console.log('[OTP] Using widgetId:', WIDGET_ID)
-    console.log('[OTP] Using tokenAuth:', TOKEN_AUTH ? TOKEN_AUTH.slice(0, 10) + '...' : 'MISSING')
-
-    // Add a timeout to handle silent widget failures (e.g. hCaptcha blocking localhost) or puzzle solve time
     const timeoutId = setTimeout(() => {
       console.warn('[OTP] Global timeout reached (60s) — widget may have failed silently')
       setOtpError('timeout')
       setOtpSending(false)
     }, 60000)
-
     window.initSendOTP({
       widgetId: WIDGET_ID,
       tokenAuth: TOKEN_AUTH,
@@ -158,8 +125,6 @@ export default function SignupPage() {
       success: (data: any) => {
         clearTimeout(timeoutId)
         if ((window as any).vTimeoutRef) clearTimeout((window as any).vTimeoutRef)
-        console.log('[OTP] ✅ Verification SUCCESS:', data)
-        // This fires when the whole verification is confirmed
         if (target === 'phone') {
           setPhoneToken(data.message)
           setIsPhoneVerified(true)
@@ -181,32 +146,26 @@ export default function SignupPage() {
       },
       getRetryMethods: (methods: any) => {
         clearTimeout(timeoutId)
-        console.log('[OTP] 📋 Got retry methods — OTP sent successfully:', Object.keys(methods || {}))
         msg91Methods.current = methods
         setOtpSending(false)
         setCountdown(30)
         setTimeout(() => otpInputRefs.current[0]?.focus(), 200)
       }
     })
-
-    // FALLBACK: If MSG91 fails to fire getRetryMethods (common bug), 
-    // we force the UI to move forward after 8 seconds so you aren't stuck!
     setTimeout(() => {
       setOtpSending((prev) => {
         if (prev) {
-           console.warn('[OTP] Fallback triggered — forcing OTP input UI after 8s timeout')
-           setCountdown(30)
-           setTimeout(() => otpInputRefs.current[0]?.focus(), 200)
-           return false
+          console.warn('[OTP] Fallback triggered — forcing OTP input UI after 8s timeout')
+          setCountdown(30)
+          setTimeout(() => otpInputRefs.current[0]?.focus(), 200)
+          return false
         }
         return prev
       })
     }, 8000)
   }, [form.phone, form.email, toast])
-
-  // Verify entered OTP
   const verifyOTP = useCallback(() => {
-    if (otpVerifying) return; // Prevent double submission
+    if (otpVerifying) return;
     const code = otpCode.join('')
     if (code.length < 4) {
       setOtpError('Please enter the complete OTP.')
@@ -214,21 +173,14 @@ export default function SignupPage() {
     }
     setOtpVerifying(true)
     setOtpError('')
-    
     // Failsafe timeout in case MSG91 silently fails
     const vTimeout = setTimeout(() => {
       setOtpVerifying(false)
       setOtpError('Verification timed out. Please try again.')
     }, 15000)
-
-    // Store timeout so we can clear it in success/failure (handled in triggerOTP via state or let's just let it clear there)
-    // Actually, since success/failure are in triggerOTP, we can't easily clear this local timeout unless we use a ref.
-    // Let's use window.vTimeoutRef for a quick fix, or just let the user know.
-    ;(window as any).vTimeoutRef = vTimeout;
-
+      ; (window as any).vTimeoutRef = vTimeout;
     const verifyFn = msg91Methods.current?.verifyOtp || (window as any).verifyOtp
     if (verifyFn) {
-      console.log('[OTP] Calling verifyOtp with code:', code)
       verifyFn(code)
     } else {
       console.error('[OTP] No verifyOtp function available!')
@@ -236,23 +188,19 @@ export default function SignupPage() {
       setOtpError('Verification service unavailable. Please resend OTP.')
     }
   }, [otpCode, otpVerifying])
-
   // Retry OTP
   const retryOTP = useCallback((method: number) => {
     if (countdown > 0) return
     setOtpCode(['', '', '', '', '', ''])
     setOtpError('')
     setCountdown(30)
-    
     const retryFn = msg91Methods.current?.retryOtp || (window as any).retryOtp
     if (retryFn) {
-      console.log('[OTP] Retrying OTP via method:', method === 1 ? 'SMS' : method === 2 ? 'Voice' : method)
       retryFn(method) // MSG91 expects 1 for SMS, 2 for Voice
     } else {
       console.error('[OTP] No retryOtp function available!')
     }
   }, [countdown])
-
   // OTP input handlers
   const handleOtpChange = (index: number, value: string) => {
     if (!/^\d*$/.test(value)) return
@@ -273,8 +221,7 @@ export default function SignupPage() {
           setOtpVerifying(false)
           setOtpError('Verification timed out. Please try again.')
         }, 15000)
-        ;(window as any).vTimeoutRef = vTimeout;
-        
+          ; (window as any).vTimeoutRef = vTimeout;
         const verifyFn = msg91Methods.current?.verifyOtp || (window as any).verifyOtp
         if (verifyFn) {
           verifyFn(newOtp.join(''))
@@ -282,13 +229,11 @@ export default function SignupPage() {
       }, 150)
     }
   }
-
   const handleOtpKeyDown = (index: number, e: React.KeyboardEvent) => {
     if (e.key === 'Backspace' && !otpCode[index] && index > 0) {
       otpInputRefs.current[index - 1]?.focus()
     }
   }
-
   const handleOtpPaste = (e: React.ClipboardEvent) => {
     e.preventDefault()
     const paste = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6)
@@ -305,7 +250,6 @@ export default function SignupPage() {
       }, 150)
     }
   }
-
   const cancelOtp = () => {
     setOtpTarget(null)
     setOtpCode(['', '', '', '', '', ''])
@@ -313,7 +257,6 @@ export default function SignupPage() {
     setOtpVerifying(false)
     msg91Methods.current = null
   }
-
   // Form submit
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -325,7 +268,6 @@ export default function SignupPage() {
       toast({ title: 'Weak password', description: 'Password must be at least 6 characters.', variant: 'destructive' })
       return
     }
-
     const phone = sanitizePhone(form.phone)
     if (phone && !/^\d{10}$/.test(phone)) {
       toast({ title: 'Invalid phone', description: 'Enter a valid 10-digit mobile number.', variant: 'destructive' })
@@ -339,7 +281,6 @@ export default function SignupPage() {
       toast({ title: 'Verification required', description: 'Please verify your email address.', variant: 'destructive' })
       return
     }
-
     setLoading(true)
     try {
       const payload: any = { name: form.name, password: form.password }
@@ -363,13 +304,11 @@ export default function SignupPage() {
       setLoading(false)
     }
   }
-
   const showOtpPanel = otpTarget !== null
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-amber-50/30 flex items-center justify-center px-4 py-8">
       <div className="w-full max-w-md">
-        {/* Logo & Header */}
+        { }
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2 mb-6 group">
             <div className="w-10 h-10 rounded-xl flex items-center justify-center text-orange-500 bg-orange-50 group-hover:bg-orange-100 transition-colors duration-200">
@@ -380,15 +319,14 @@ export default function SignupPage() {
           <h1 className="text-2xl font-bold text-gray-900">Create your account</h1>
           <p className="text-gray-500 mt-1">Get started with Pureframe Labs</p>
         </div>
-
         <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 relative overflow-hidden">
-          {/* â”€â”€ OTP Verification Panel (slides over the form) â”€â”€ */}
+
           <div
             className={`absolute inset-0 bg-white z-20 p-8 flex flex-col transition-all duration-300 ease-in-out ${showOtpPanel ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0 pointer-events-none'
               }`}
           >
             <div className="flex-1 flex flex-col items-center justify-center">
-              {/* Icon */}
+    
               <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-100 to-amber-50 flex items-center justify-center mb-5 shadow-sm">
                 {otpTarget === 'email' ? (
                   <Mail className="w-7 h-7 text-orange-600" />
@@ -396,7 +334,6 @@ export default function SignupPage() {
                   <Phone className="w-7 h-7 text-orange-600" />
                 )}
               </div>
-
               <h2 className="text-xl font-bold text-gray-900 mb-1">Verify your {otpTarget === 'email' ? 'email' : 'phone'}</h2>
               <p className="text-sm text-gray-500 mb-6 text-center leading-relaxed">
                 {otpSending ? (
@@ -405,8 +342,7 @@ export default function SignupPage() {
                   <>We sent a code to <span className="font-semibold text-gray-700">{otpTarget === 'email' ? form.email : form.phone}</span></>
                 )}
               </p>
-
-              {/* OTP Slots */}
+    
               {!otpSending && (
                 <>
                   <div className="flex gap-2.5 mb-4">
@@ -432,13 +368,11 @@ export default function SignupPage() {
                       />
                     ))}
                   </div>
-
-                  {/* Error */}
+        
                   {otpError && (
                     <p className="text-sm text-red-500 mb-3 text-center font-medium animate-in fade-in slide-in-from-top-1 duration-200">{otpError}</p>
                   )}
-
-                  {/* Verify Button */}
+        
                   <Button
                     onClick={verifyOTP}
                     disabled={otpVerifying || otpCode.join('').length < 4}
@@ -450,7 +384,6 @@ export default function SignupPage() {
                       <span className="flex items-center gap-2"><ShieldCheck className="w-4 h-4" /> Verify OTP</span>
                     )}
                   </Button>
-
                   {/* Resend / Retry */}
                   <div className="text-center text-sm text-gray-500">
                     {countdown > 0 ? (
@@ -474,22 +407,19 @@ export default function SignupPage() {
                 </>
               )}
             </div>
-
-            {/* Cancel */}
+  
             <button onClick={cancelOtp} className="text-sm text-gray-400 hover:text-gray-600 mt-4 transition-colors text-center">
-              â† Back to form
+              &larr; Back to form
             </button>
           </div>
 
-          {/* â”€â”€ Main Signup Form â”€â”€ */}
           <form onSubmit={handleSignup} className="space-y-5">
-            {/* Name */}
+  
             <div>
               <Label htmlFor="name" className="text-sm font-medium text-gray-700">Full Name <span className="text-red-500">*</span></Label>
               <Input id="name" type="text" placeholder="Rahul Sharma" value={form.name} onChange={update('name')} className="mt-1.5 h-11 border-gray-300 rounded-xl focus:border-orange-400 focus:ring-orange-200" autoComplete="name" />
             </div>
-
-            {/* Email with verify */}
+  
             <div>
               <Label htmlFor="email" className="text-sm font-medium text-gray-700">Email Address <span className="text-red-500">*</span></Label>
               <div className="flex gap-2 mt-1.5">
@@ -526,8 +456,7 @@ export default function SignupPage() {
                 </p>
               )}
             </div>
-
-            {/* Phone with verify */}
+  
             <div>
               <Label htmlFor="phone" className="text-sm font-medium text-gray-700">Phone Number <span className="text-red-500">*</span></Label>
               <div className="flex gap-2 mt-1.5">
@@ -567,8 +496,7 @@ export default function SignupPage() {
                 <p className="text-xs text-gray-400 mt-1.5">Required to secure your account</p>
               )}
             </div>
-
-            {/* Password */}
+  
             <div>
               <Label htmlFor="password" className="text-sm font-medium text-gray-700">Password <span className="text-red-500">*</span></Label>
               <div className="relative mt-1.5">
@@ -599,8 +527,7 @@ export default function SignupPage() {
                 </div>
               )}
             </div>
-
-            {/* Submit */}
+  
             <Button
               type="submit"
               disabled={loading}
@@ -614,13 +541,11 @@ export default function SignupPage() {
             </Button>
           </form>
 
-          {/* Divider */}
           <div className="relative my-6">
             <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-gray-200" /></div>
             <div className="relative flex justify-center text-sm"><span className="px-3 bg-white text-gray-400">or</span></div>
           </div>
 
-          {/* Google */}
           <Button variant="outline" className="w-full h-11 rounded-xl border-gray-300 font-medium hover:bg-gray-50 transition-all duration-200" disabled>
             <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
               <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
@@ -630,14 +555,12 @@ export default function SignupPage() {
             </svg>
             Continue with Google (coming soon)
           </Button>
-
           <p className="text-center text-sm text-gray-500 mt-6">
             Already have an account?{' '}
             <Link href="/login" className="text-orange-600 font-semibold hover:text-orange-700 transition-colors">Sign in</Link>
           </p>
         </div>
-
-        {/* Trust badge */}
+        { }
         <p className="text-center text-xs text-gray-400 mt-4 flex items-center justify-center gap-1.5">
           <ShieldCheck className="w-3.5 h-3.5" /> Secured with MSG91 OTP verification
         </p>

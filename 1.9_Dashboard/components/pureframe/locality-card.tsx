@@ -1,12 +1,10 @@
 import { ChevronRight } from "lucide-react"
 import Link from "next/link"
-
 interface LocalityCardProps {
   name: string
   transactionCount: number
   href?: string
 }
-
 export function LocalityCard({ name, transactionCount, href = "#" }: LocalityCardProps) {
   return (
     <Link

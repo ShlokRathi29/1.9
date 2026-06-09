@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "bun run --watch src/index.ts",
-    "start": "bun run src/index.ts",
-    "build": "bun build src/index.ts --outdir dist --target bun",
+    "dev": "tsx watch src/index.ts",
+    "start": "tsx src/index.ts",
+    "build": "tsc",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:migrate:prod": "prisma migrate deploy",
@@ -16,6 +16,7 @@
     "@hono/node-server": "^1.13.7",
     "@prisma/client": "^6.3.1",
     "bcryptjs": "^3.0.2",
+    "dotenv": "^16.4.7",
     "hono": "^4.7.4",
     "jsonwebtoken": "^9.0.2",
     "pg": "^8.13.3",
@@ -25,8 +26,10 @@
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
     "@types/jsonwebtoken": "^9.0.9",
+    "@types/node": "^22.10.0",
     "@types/pg": "^8.11.11",
     "prisma": "^6.3.1",
+    "tsx": "^4.19.0",
     "typescript": "^5.7.3"
   }
 }

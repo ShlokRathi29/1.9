@@ -1,5 +1,4 @@
 'use client'
-
 import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -11,7 +10,6 @@ import { useToast } from '@/hooks/use-toast'
 import { useAppStore } from '@/lib/store'
 import { auth } from '@/lib/api'
 import { PureframeLogo } from '@/components/pureframe-logo'
-
 export default function LoginPage() {
   const router = useRouter()
   const { toast } = useToast()
@@ -20,7 +18,6 @@ export default function LoginPage() {
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
-
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!emailOrPhone || !password) {
@@ -41,7 +38,6 @@ export default function LoginPage() {
       setLoading(false)
     }
   }
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 to-white flex items-center justify-center px-4">
       <div className="w-full max-w-md">
@@ -55,7 +51,6 @@ export default function LoginPage() {
           <h1 className="text-2xl font-bold text-gray-900">Welcome back</h1>
           <p className="text-gray-500 mt-1">Sign in to your account</p>
         </div>
-
         <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
           <form onSubmit={handleLogin} className="space-y-5">
             <div>
@@ -70,7 +65,6 @@ export default function LoginPage() {
                 autoComplete="username"
               />
             </div>
-
             <div>
               <Label htmlFor="password" className="text-sm font-medium text-gray-700">Password</Label>
               <div className="relative mt-1">
@@ -88,17 +82,14 @@ export default function LoginPage() {
                 </button>
               </div>
             </div>
-
             <Button type="submit" disabled={loading} className="w-full h-11 bg-orange-500 hover:bg-orange-600 text-white rounded-xl font-semibold text-base">
               {loading ? 'Signing in...' : 'Sign In'}
             </Button>
           </form>
-
           <div className="relative my-6">
             <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-gray-200" /></div>
             <div className="relative flex justify-center text-sm"><span className="px-3 bg-white text-gray-400">or continue with</span></div>
           </div>
-
           <Button variant="outline" className="w-full h-11 rounded-xl border-gray-300 font-medium" disabled>
             <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
               <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -108,7 +99,6 @@ export default function LoginPage() {
             </svg>
             Continue with Google (coming soon)
           </Button>
-
           <p className="text-center text-sm text-gray-500 mt-6">
             Don&apos;t have an account?{' '}
             <Link href="/signup" className="text-orange-600 font-semibold hover:text-orange-700">Sign up</Link>

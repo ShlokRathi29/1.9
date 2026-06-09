@@ -1,5 +1,4 @@
 "use client"
-
 import { ChevronRight } from "lucide-react"
 import {
   Accordion,
@@ -7,17 +6,14 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
-
 interface FAQ {
   question: string
   answer: string
 }
-
 interface FAQSectionProps {
   locationName: string
   faqs?: FAQ[]
 }
-
 export function FAQSection({ locationName, faqs }: FAQSectionProps) {
   const defaultFaqs: FAQ[] = [
     {
@@ -41,9 +37,7 @@ export function FAQSection({ locationName, faqs }: FAQSectionProps) {
       answer: `${locationName} offers various affordable housing options across different budget ranges. Use actual transaction data on Pureframe Labs to find projects that match your budget.`,
     },
   ]
-
   const displayFaqs = faqs && faqs.length > 0 ? faqs : defaultFaqs
-
   return (
     <div className="mx-auto max-w-7xl px-4 py-8">
       <h2 className="mb-6 text-lg font-semibold text-gray-900">Frequently Asked Questions</h2>

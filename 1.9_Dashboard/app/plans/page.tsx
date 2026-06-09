@@ -1,5 +1,4 @@
 'use client'
-
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { CheckCircle } from 'lucide-react'
@@ -14,17 +13,14 @@ import { useAppStore } from '@/lib/store'
 import { useToast } from '@/hooks/use-toast'
 import { payments } from '@/lib/api'
 import { useState } from 'react'
-
 const planIdMap: Record<string, string> = {
   'Lite': 'lite',
   'Plus': 'plus',
   'Premium': 'premium',
 }
-
 declare global {
   interface Window { Razorpay: any }
 }
-
 function loadRazorpayScript(): Promise<boolean> {
   return new Promise((resolve) => {
     if (window.Razorpay) { resolve(true); return }
@@ -35,21 +31,16 @@ function loadRazorpayScript(): Promise<boolean> {
     document.body.appendChild(script)
   })
 }
-
 export default function PlansPage() {
   const { setTokens, user } = useAppStore()
   const { toast } = useToast()
   const router = useRouter()
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null)
-
-  // Check localStorage â€” more reliable than Zustand on first render
   const isLoggedIn = () =>
     typeof window !== 'undefined' && !!localStorage.getItem('pureframe_token')
-
   const handleBuyPlan = async (planName: string) => {
     const planId = planIdMap[planName]
     if (!planId) return
-
     if (!isLoggedIn()) {
       toast({
         title: 'Sign in required',
@@ -59,18 +50,15 @@ export default function PlansPage() {
       router.push('/login')
       return
     }
-
     setLoadingPlan(planId)
     try {
       const order = await payments.createOrder(planId)
-
       const loaded = await loadRazorpayScript()
       if (!loaded) {
         toast({ title: 'Could not load payment window. Please try again.', variant: 'destructive' })
         setLoadingPlan(null)
         return
       }
-
       const rzpOptions = {
         key: order.keyId,
         amount: order.amount,
@@ -91,7 +79,6 @@ export default function PlansPage() {
               razorpayPaymentId: response.razorpay_payment_id,
               razorpaySignature: response.razorpay_signature,
             })
-            // Use server's authoritative newBalance â€” never addTokens blindly
             setTokens(result.newBalance)
             toast({
               title: 'Payment successful! 🎉',
@@ -108,7 +95,6 @@ export default function PlansPage() {
           },
         },
       }
-
       const rzp = new window.Razorpay(rzpOptions)
       rzp.open()
     } catch (err: any) {
@@ -118,11 +104,9 @@ export default function PlansPage() {
           description: 'Please log in to continue purchasing tokens.',
           variant: 'destructive',
         })
-
         router.push('/login')
         return
       }
-
       toast({
         title: err.message || 'Unable to start payment. Please try again.',
         variant: 'destructive',
@@ -131,12 +115,10 @@ export default function PlansPage() {
       setLoadingPlan(null)
     }
   }
-
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <Navbar />
       <ProfileSidebar />
-
       <section className="bg-gradient-to-r from-orange-500 to-orange-600 text-white py-20 relative overflow-hidden">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">Save lakhs on your property</h1>
@@ -145,10 +127,8 @@ export default function PlansPage() {
           </p>
         </div>
       </section>
-
       <section className="py-16 bg-gray-50 flex-1">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-
           {!isLoggedIn() && (
             <div className="mb-10 bg-orange-50 border border-orange-200 rounded-xl p-5 flex items-center justify-between gap-4 flex-wrap">
               <div>
@@ -165,7 +145,6 @@ export default function PlansPage() {
               </div>
             </div>
           )}
-
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {plans.map((plan) => (
               <Card
@@ -203,7 +182,6 @@ export default function PlansPage() {
               </Card>
             ))}
           </div>
-
           <div className="text-center mt-14">
             <p className="text-gray-600">
               Need a custom plan?{' '}
@@ -214,7 +192,6 @@ export default function PlansPage() {
           </div>
         </div>
       </section>
-
       <Footer />
     </div>
   )

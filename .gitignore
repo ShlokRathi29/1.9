@@ -11,6 +11,12 @@ build/
 .env.local
 .env.*.local
 
+# Lock files
+pnpm-lock.yaml
+package-lock.json
+bun.lock
+yarn.lock
+
 # Logs
 *.log
 npm-debug.log*
@@ -45,4 +51,7 @@ tmp/
 .vercel/
 
 # Turborepo
-.turbo/
+.turbo/
+
+# pnpm
+pnpm-workspace.yaml

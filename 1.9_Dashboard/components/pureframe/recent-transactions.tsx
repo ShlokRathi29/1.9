@@ -1,8 +1,6 @@
 "use client"
-
 import { useState } from "react"
 import { Lock, ExternalLink } from "lucide-react"
-
 interface Transaction {
   date: string
   type: "Sale" | "Rent"
@@ -10,19 +8,15 @@ interface Transaction {
   unit: string
   amount: string
 }
-
 interface RecentTransactionsProps {
   transactions: Transaction[]
   totalTransactions: number
 }
-
 export function RecentTransactions({ transactions, totalTransactions }: RecentTransactionsProps) {
   const [activeTab, setActiveTab] = useState<"sale" | "rent">("sale")
-
   const filteredTransactions = transactions.filter(t => 
     activeTab === "sale" ? t.type === "Sale" : t.type === "Rent"
   )
-
   return (
     <div className="bg-white rounded-lg border border-gray-200 p-6">
       <div className="flex items-center justify-between mb-6">
@@ -39,8 +33,7 @@ export function RecentTransactions({ transactions, totalTransactions }: RecentTr
           <ExternalLink className="h-4 w-4" />
         </button>
       </div>
-
-      {/* Tabs */}
+      {}
       <div className="flex gap-4 mb-6 border-b border-gray-200">
         <button
           onClick={() => setActiveTab("sale")}
@@ -63,8 +56,7 @@ export function RecentTransactions({ transactions, totalTransactions }: RecentTr
           Rent
         </button>
       </div>
-
-      {/* Table */}
+      {}
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>

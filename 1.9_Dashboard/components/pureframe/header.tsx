@@ -1,6 +1,5 @@
 "use client"
-
-import { Search, ShoppingCart, Bell, ChevronDown, MapPin } from "lucide-react"
+import { Search, Bell, ChevronDown, MapPin } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import {
   Select,
@@ -11,10 +10,8 @@ import {
 } from "@/components/ui/select"
 import { useRouter } from "next/navigation"
 import { PureframeLogo } from "@/components/pureframe-logo"
-
 export function Header() {
   const router = useRouter()
-
   const handleCityChange = (value: string) => {
     const cityMap: Record<string, { id: number; name: string }> = {
       pune: { id: 4, name: "Pune" },
@@ -27,21 +24,19 @@ export function Header() {
       router.push(`/city/${city.name}/${city.id}`)
     }
   }
-
   return (
     <header className="border-b border-gray-200 bg-white">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
-        {/* Logo */}
+        {}
         <div className="flex items-center gap-2">
           <div className="flex h-8 w-8 items-center justify-center text-orange-500">
             <PureframeLogo className="h-6 w-6" />
           </div>
           <span className="text-xl font-bold text-gray-900">Pureframe Labs</span>
         </div>
-
-        {/* Search Section */}
+        {}
         <div className="flex flex-1 items-center gap-3 px-8">
-          {/* City Selector */}
+          {}
           <Select defaultValue="pune" onValueChange={handleCityChange}>
             <SelectTrigger className="w-[140px] border-gray-200 bg-white">
               <div className="flex items-center gap-2">
@@ -56,8 +51,7 @@ export function Header() {
               <SelectItem value="delhi">Delhi</SelectItem>
             </SelectContent>
           </Select>
-
-          {/* Search Input */}
+          {}
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
             <Input
@@ -66,12 +60,9 @@ export function Header() {
             />
           </div>
         </div>
-
-        {/* Right Icons */}
+        {}
         <div className="flex items-center gap-4">
-          <button className="relative text-gray-600 hover:text-gray-900">
-            <ShoppingCart className="h-5 w-5" />
-          </button>
+
           <button className="relative text-gray-600 hover:text-gray-900">
             <Bell className="h-5 w-5" />
             <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] text-white">
@@ -85,8 +76,7 @@ export function Header() {
           </button>
         </div>
       </div>
-
-      {/* AI Banner */}
+      {}
       <div className="flex items-center justify-center gap-4 bg-gradient-to-r from-gray-800 via-gray-900 to-gray-800 py-2">
         <span className="rounded-full bg-red-500 px-2 py-0.5 text-xs font-semibold text-white">
           NEW
