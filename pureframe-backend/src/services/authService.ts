@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken'
 import { prisma } from '../db/prisma'
 import { env } from '../config/env'
 import { httpError } from '../middleware/errorMiddleware'
-import type { SignupInput, LoginInput, UpdateUserInput } from '../validators/schemas'
+import type { SignupInput, LoginInput, OtpLoginInput, UpdateUserInput } from '../validators/schemas'
 async function verifyMSG91Token(token: string) {
   try {
     const res = await fetch('https://control.msg91.com/api/v5/widget/verifyAccessToken', {
@@ -86,6 +86,24 @@ export const authService = {
     const token = signToken(user.id, user.email)
     const { passwordHash: _, ...safeUser } = user
     return { token, user: safeUser }
+  },
+  async otpLogin(data: OtpLoginInput) {
+    // Verify the OTP token with MSG91
+    await verifyMSG91Token(data.otpToken)
+
+    const isEmail = data.identifier.includes('@')
+    const user = await prisma.user.findFirst({
+      where: isEmail
+        ? { email: data.identifier }
+        : { phone: data.identifier },
+      select: { id: true, name: true, email: true, phone: true, walletBalance: true, createdAt: true },
+    })
+    if (!user) {
+      throw httpError('No account found with this ' + (isEmail ? 'email' : 'phone number') + '. Please sign up first.', 404)
+    }
+
+    const token = signToken(user.id, user.email)
+    return { token, user }
   },
   async getMe(userId: string) {
     const user = await prisma.user.findUnique({

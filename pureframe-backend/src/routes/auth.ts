@@ -1,7 +1,7 @@
 import { Hono } from 'hono'
 import { authService } from '../services/authService'
 import { requireAuth } from '../middleware/authMiddleware'
-import { signupSchema, loginSchema, updateUserSchema } from '../validators/schemas'
+import { signupSchema, loginSchema, otpLoginSchema, updateUserSchema } from '../validators/schemas'
 const auth = new Hono()
 auth.post('/signup', async (c) => {
   const body = await c.req.json()
@@ -13,6 +13,12 @@ auth.post('/login', async (c) => {
   const body = await c.req.json()
   const data = loginSchema.parse(body)
   const result = await authService.login(data)
+  return c.json({ success: true, ...result })
+})
+auth.post('/otp-login', async (c) => {
+  const body = await c.req.json()
+  const data = otpLoginSchema.parse(body)
+  const result = await authService.otpLogin(data)
   return c.json({ success: true, ...result })
 })
 auth.post('/logout', (c) => c.json({ success: true, message: 'Logged out' }))

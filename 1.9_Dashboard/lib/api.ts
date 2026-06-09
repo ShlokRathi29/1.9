@@ -42,6 +42,8 @@ export const auth = {
     apiFetch<{ token: string; user: any }>('/auth/signup', { method: 'POST', body: JSON.stringify(data) }),
   login: (data: { emailOrPhone: string; password: string }) =>
     apiFetch<{ token: string; user: any }>('/auth/login', { method: 'POST', body: JSON.stringify(data) }),
+  otpLogin: (data: { identifier: string; otpToken: string }) =>
+    apiFetch<{ token: string; user: any }>('/auth/otp-login', { method: 'POST', body: JSON.stringify(data) }),
   me: () => apiFetch<{ user: any }>('/user/me'),
 }
 export const browse = {
