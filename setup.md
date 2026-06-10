@@ -1,6 +1,6 @@
 # Pureframe Labs - Project Setup Guide
 
-This guide provides step-by-step instructions to set up and run the full-stack Pureframe Labs project (Pureframe Frontend v6 & Backend) on a new machine. 
+This guide provides step-by-step instructions to set up and run the full-stack Pureframe Labs project (1.9 Dashboard & Backend) on a new machine. 
 
 ## Prerequisites
 
@@ -13,16 +13,15 @@ We recommend using a stable version of Node.js (v18 or above).
   npm -v
   ```
 
-### 2. Install Bun
-This project uses **Bun** as its primary package manager and JavaScript runtime.
-- Install Bun by following the instructions on [Bun's official site](https://bun.sh/). 
-- For Windows (using PowerShell):
-  ```powershell
-  powershell -c "irm bun.sh/install | iex"
+### 2. Install pnpm
+This project uses **pnpm** as its package manager.
+- Install pnpm globally via npm:
+  ```bash
+  npm install -g pnpm
   ```
 - Verify the installation:
   ```bash
-  bun -v
+  pnpm -v
   ```
 
 ### 3. Install and Setup PostgreSQL
@@ -42,7 +41,7 @@ The backend uses PostgreSQL as its database.
 
 2. **Install Dependencies:**
    ```bash
-   bun install
+   pnpm install
    ```
 
 3. **Environment Configuration:**
@@ -54,7 +53,10 @@ The backend uses PostgreSQL as its database.
    DATABASE_URL="postgresql://postgres:yourpassword@localhost:5432/pureframe"
    JWT_SECRET="your_secure_jwt_secret"
    JWT_EXPIRES_IN="7d"
-   
+
+   # MSG91 OTP (used for signup verification)
+   MSG91_AUTHKEY="your_msg91_authkey"
+
    # External Integrations (Optional for basic running)
    RAZORPAY_KEY_ID="your_razorpay_key"
    RAZORPAY_KEY_SECRET="your_razorpay_secret"
@@ -63,44 +65,54 @@ The backend uses PostgreSQL as its database.
 4. **Initialize the Database:**
    - Run Prisma commands to generate the client and push the schema to your database.
    ```bash
-   bun run db:generate
-   bun run db:push
+   pnpm run db:generate
+   pnpm run db:push
    ```
    *(Note: Ensure your PostgreSQL server is running and the credentials in `.env` are correct before executing this).*
 
 5. **Start the Backend Server:**
    ```bash
-   bun run dev
+   pnpm run dev
    ```
-   The backend should now be running.
+   The backend should now be running on `http://localhost:3001`.
 
 ---
 
-## Frontend Setup (Pureframe Frontend v6)
+## Frontend Setup (1.9 Dashboard)
 
 1. **Open a new terminal window** and navigate to the frontend directory:
    ```bash
-   cd pureframe-frontend-v6
+   cd 1.9_Dashboard
    ```
 
 2. **Install Dependencies:**
    ```bash
-   bun install
+   pnpm install
    ```
 
 3. **Environment Configuration:**
-   - Create a `.env.local` file in the `pureframe-frontend-v6` directory.
-   - Configure the environment variables to point to the backend:
+   - Create a `.env.local` file in the `1.9_Dashboard` directory.
+   - Configure the environment variables:
    ```env
-   # Update this port based on what the backend prints when it starts
-   NEXT_PUBLIC_API_URL="http://localhost:3000" 
+   NEXT_PUBLIC_API_URL="http://localhost:3001"
+
+   # MSG91 OTP (used for signup verification only; login uses password)
+   NEXT_PUBLIC_MSG91_WIDGET_ID="your_msg91_widget_id"
+   NEXT_PUBLIC_MSG91_TOKEN_AUTH="your_msg91_token_auth"
    ```
 
 4. **Start the Frontend Server:**
    ```bash
-   bun run dev
+   pnpm run dev
    ```
-   The Next.js frontend will start and typically be accessible at `http://localhost:3000` (or `http://localhost:3001` if port 3000 is occupied by the backend).
+   The Next.js frontend will start at `http://localhost:3000`.
+
+---
+
+## Authentication
+
+- **Login:** Password-based authentication only (phone or email + password).
+- **Signup:** Uses MSG91 OTP verification for phone/email, followed by account creation with a password.
 
 ---
 
@@ -108,6 +120,6 @@ The backend uses PostgreSQL as its database.
 
 To easily view and manage your database via a web interface, open a new terminal in the backend directory and run:
 ```bash
-bun run db:studio
+pnpm run db:studio
 ```
 This will open **Prisma Studio** in your default web browser at `http://localhost:5555`.
